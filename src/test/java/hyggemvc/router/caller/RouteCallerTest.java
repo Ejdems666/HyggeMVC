@@ -1,12 +1,16 @@
-package hyggemvc.router;
+package hyggemvc.router.caller;
 
 import hyggemvc.controller.Controller;
 import hyggemvc.controller.ErrorController;
+import hyggemvc.router.BasicRoute;
+import hyggemvc.router.Route;
+import hyggemvc.router.RouteCaller;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by adam on 25/02/2017.
@@ -14,11 +18,12 @@ import javax.servlet.http.HttpServletRequest;
 class RouteCallerTest {
     private RouteCaller routeCaller;
     private Route route = new BasicRoute("hyggemvc.controller");
-    private HttpServletRequest httpRequest = new RequestMocUp();
+    private HttpServletRequest request = new RequestMocUp();
+    private HttpServletResponse respose = new ResponseMockUp();
 
     @BeforeEach
     void setUp() {
-        routeCaller = new RouteCaller(route,httpRequest);
+        routeCaller = new RouteCaller(route, request, respose);
     }
 
     @Test

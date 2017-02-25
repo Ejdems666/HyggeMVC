@@ -3,6 +3,7 @@ package hyggemvc.router;
 import hyggemvc.controller.Controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
@@ -13,11 +14,13 @@ public class RouteCaller {
 
     private final Route route;
     private final HttpServletRequest request;
+    private final HttpServletResponse response;
     private boolean looping = false;
 
-    public RouteCaller(Route route, HttpServletRequest request) {
+    public RouteCaller(Route route, HttpServletRequest request, HttpServletResponse response) {
         this.route = route;
         this.request = request;
+        this.response = response;
     }
 
     public Controller callRoute() {
@@ -39,7 +42,11 @@ public class RouteCaller {
             return controller;
         }
     }
-
+    private Controller createController() throws Exception {
+        Class<?> controllerClass = Class.forName(route.getAssembledControllerClass());
+        Constructor<?> constructor = controllerClass.getConstructor(HttpServletRequest.class,HttpServletResponse.class);
+        return ((Controller) constructor.newInstance(request,response));
+    }
     private void callMethod(Controller controller) throws Exception {
         Object argument = route.getArgument();
         Method method;
@@ -50,11 +57,5 @@ public class RouteCaller {
             method = controller.getClass().getMethod(route.getMethodName());
             method.invoke(controller);
         }
-    }
-
-    private Controller createController() throws Exception {
-        Class<?> controllerClass = Class.forName(route.getAssembledControllerClass());
-        Constructor<?> constructor = controllerClass.getConstructor(HttpServletRequest.class);
-        return ((Controller) constructor.newInstance(request));
     }
 }
