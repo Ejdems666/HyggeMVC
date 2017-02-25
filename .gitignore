@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+.gitignore
+.idea/
+HyggeMVC.iml
+src/main/resources/
+src/test/java/mvc/controller/
+target/
