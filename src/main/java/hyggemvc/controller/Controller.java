@@ -1,10 +1,8 @@
 package hyggemvc.controller;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * Created by adam on 25/02/2017.
@@ -18,7 +16,7 @@ public abstract class Controller {
         this.response = response;
     }
 
-    protected void renderTemplate(String template) throws ServletException, IOException {
+    protected void renderTemplate(String template){
         response.setContentType("text/html");
         request.setAttribute("template",template);
 
@@ -30,6 +28,10 @@ public abstract class Controller {
         }
 
         RequestDispatcher view = request.getRequestDispatcher("index.jsp");
-        view.forward(request, response);
+        try {
+            view.forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
