@@ -10,6 +10,7 @@ public class BasicRouter implements Router {
 
     @Override
     public void inflateRoute(Route route, String url) {
+        if (url.equals("/")) return;
         String[] urlParts = url.substring(1).split("/");
         if (urlParts.length > 0) {
             route.setControllerName(urlParser.toCamelCaseWithFirstUpperCase(urlParts[0]));

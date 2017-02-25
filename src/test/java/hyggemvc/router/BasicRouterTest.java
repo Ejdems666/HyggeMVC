@@ -18,6 +18,14 @@ class BasicRouterTest {
     }
 
     @Test
+    void testDefaultRoute() {
+        router.inflateRoute(route,"/");
+        Assertions.assertEquals("hyggemvc.controller.DefaultController",route.getAssembledControllerClass());
+        Assertions.assertEquals("index",route.getMethodName());
+        Assertions.assertEquals(null,route.getArgument());
+    }
+
+    @Test
     void testOnlyControllerRoute() {
         router.inflateRoute(route,"/test");
         Assertions.assertEquals("hyggemvc.controller.TestController",route.getAssembledControllerClass());

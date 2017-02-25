@@ -5,7 +5,7 @@ package hyggemvc.router;
  */
 public class BasicRoute implements Route {
     private String controllerPackage;
-    private String controllerName;
+    private String controllerName = "Default";
     private String methodName = "index";
     private Object argument = null;
 
