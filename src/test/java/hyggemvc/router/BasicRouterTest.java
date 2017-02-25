@@ -1,6 +1,6 @@
-package mvc.router;
+package hyggemvc.router;
 
-import mvc.router.exceptions.TooManyArgumentsException;
+import hyggemvc.router.exceptions.TooManyArgumentsException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,13 +14,13 @@ class BasicRouterTest {
 
     @BeforeEach
     void setUp() {
-        route = new BasicRoute("mvc.controller");
+        route = new BasicRoute("hyggemvc.controller");
     }
 
     @Test
     void testOnlyControllerRoute() {
         router.inflateRoute(route,"Test");
-        Assertions.assertEquals("mvc.controller.TestController",route.getAssembledControllerClass());
+        Assertions.assertEquals("hyggemvc.controller.TestController",route.getAssembledControllerClass());
         Assertions.assertEquals("index",route.getMethodName());
         Assertions.assertEquals(null,route.getArgument());
     }
@@ -28,7 +28,7 @@ class BasicRouterTest {
     @Test
     void testControllerAndMethodRoute() {
         router.inflateRoute(route,"Test/method");
-        Assertions.assertEquals("mvc.controller.TestController",route.getAssembledControllerClass());
+        Assertions.assertEquals("hyggemvc.controller.TestController",route.getAssembledControllerClass());
         Assertions.assertEquals("method",route.getMethodName());
         Assertions.assertEquals(null,route.getArgument());
     }
@@ -36,7 +36,7 @@ class BasicRouterTest {
     @Test
     void testFullRouteWithValidArgument() {
         router.inflateRoute(route,"Test/method/1");
-        Assertions.assertEquals("mvc.controller.TestController",route.getAssembledControllerClass());
+        Assertions.assertEquals("hyggemvc.controller.TestController",route.getAssembledControllerClass());
         Assertions.assertEquals("method",route.getMethodName());
         Assertions.assertEquals(Integer.valueOf(1),route.getArgument());
     }
@@ -44,7 +44,7 @@ class BasicRouterTest {
     @Test
     void testFullRouteWithInvalidArgument() {
         router.inflateRoute(route,"Test/method/numberShouldBeHere");
-        Assertions.assertEquals("mvc.controller.ErrorController",route.getAssembledControllerClass());
+        Assertions.assertEquals("hyggemvc.controller.ErrorController",route.getAssembledControllerClass());
         Assertions.assertEquals("notFound",route.getMethodName());
         Assertions.assertTrue(route.getArgument() instanceof NumberFormatException);
     }
@@ -52,7 +52,7 @@ class BasicRouterTest {
     @Test
     void testTooManyArgumentsInRoute() {
         router.inflateRoute(route,"Test/method/with/just/too/many/arguments");
-        Assertions.assertEquals("mvc.controller.ErrorController",route.getAssembledControllerClass());
+        Assertions.assertEquals("hyggemvc.controller.ErrorController",route.getAssembledControllerClass());
         Assertions.assertEquals("notFound",route.getMethodName());
         Assertions.assertTrue(route.getArgument() instanceof TooManyArgumentsException);
     }

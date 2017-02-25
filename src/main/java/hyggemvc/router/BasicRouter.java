@@ -1,6 +1,6 @@
-package mvc.router;
+package hyggemvc.router;
 
-import mvc.router.exceptions.TooManyArgumentsException;
+import hyggemvc.router.exceptions.TooManyArgumentsException;
 
 /**
  * Created by adam on 21/02/2017.

@@ -1,6 +1,6 @@
-package mvc.router;
+package hyggemvc.router;
 
-import mvc.controller.Controller;
+import hyggemvc.controller.Controller;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Constructor;

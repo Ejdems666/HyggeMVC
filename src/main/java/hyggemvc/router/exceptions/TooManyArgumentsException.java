@@ -1,4 +1,4 @@
-package mvc.router.exceptions;
+package hyggemvc.router.exceptions;
 
 /**
  * Created by adam on 25/02/2017.

@@ -1,4 +1,4 @@
-package mvc.controller;
+package hyggemvc.controller;
 
 
 import javax.servlet.http.HttpServletRequest;

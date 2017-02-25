@@ -1,4 +1,4 @@
-package mvc.router;
+package hyggemvc.router;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

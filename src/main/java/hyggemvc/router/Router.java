@@ -1,4 +1,4 @@
-package mvc.router;
+package hyggemvc.router;
 
 /**
  * Created by adam on 21/02/2017.

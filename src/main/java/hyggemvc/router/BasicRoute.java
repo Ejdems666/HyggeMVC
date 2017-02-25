@@ -1,4 +1,4 @@
-package mvc.router;
+package hyggemvc.router;
 
 /**
  * Created by adam on 25/02/2017.
@@ -46,7 +46,7 @@ public class BasicRoute implements Route {
     @Override
     public void setErrorRoute(Exception e, String errorType){
         controllerName = "Error";
-        controllerPackage = "mvc.controller";
+        controllerPackage = "hyggemvc.controller";
         methodName = errorType;
         argument = e;
     }

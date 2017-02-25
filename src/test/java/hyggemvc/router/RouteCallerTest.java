@@ -1,7 +1,7 @@
-package mvc.router;
+package hyggemvc.router;
 
-import mvc.controller.Controller;
-import mvc.controller.ErrorController;
+import hyggemvc.controller.Controller;
+import hyggemvc.controller.ErrorController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 class RouteCallerTest {
     private RouteCaller routeCaller;
-    private Route route = new BasicRoute("mvc.controller");
+    private Route route = new BasicRoute("hyggemvc.controller");
     private HttpServletRequest httpRequest = new RequestMocUp();
 
     @BeforeEach
