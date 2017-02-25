@@ -1,8 +1,8 @@
 package mvc.router;
 
-import com.sun.deploy.net.HttpRequest;
 import mvc.controller.Controller;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
@@ -12,10 +12,10 @@ import java.lang.reflect.Method;
 public class RouteCaller {
 
     private final Route route;
-    private final HttpRequest request;
+    private final HttpServletRequest request;
     private boolean looping = false;
 
-    public RouteCaller(Route route, HttpRequest request) {
+    public RouteCaller(Route route, HttpServletRequest request) {
         this.route = route;
         this.request = request;
     }
@@ -54,7 +54,7 @@ public class RouteCaller {
 
     private Controller createController() throws Exception {
         Class<?> controllerClass = Class.forName(route.getAssembledControllerClass());
-        Constructor<?> constructor = controllerClass.getConstructor(HttpRequest.class);
+        Constructor<?> constructor = controllerClass.getConstructor(HttpServletRequest.class);
         return ((Controller) constructor.newInstance(request));
     }
 }

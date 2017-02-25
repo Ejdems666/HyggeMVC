@@ -1,63 +1,291 @@
 package mvc.router;
 
 
-import com.sun.deploy.net.HttpRequest;
-import com.sun.deploy.net.HttpResponse;
-
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URL;
+import java.io.UnsupportedEncodingException;
+import java.security.Principal;
+import java.util.Enumeration;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by adam on 25/02/2017.
  */
-public class RequestMocUp implements HttpRequest{
+public class RequestMocUp implements HttpServletRequest{
+
     @Override
-    public HttpResponse doGetRequestEX(URL url, long l) throws IOException {
+    public String getAuthType() {
         return null;
     }
 
     @Override
-    public HttpResponse doGetRequestEX(URL url, String[] strings, String[] strings1, long l) throws IOException {
+    public Cookie[] getCookies() {
+        return new Cookie[0];
+    }
+
+    @Override
+    public long getDateHeader(String s) {
+        return 0;
+    }
+
+    @Override
+    public String getHeader(String s) {
         return null;
     }
 
     @Override
-    public HttpResponse doHeadRequest(URL url) throws IOException {
+    public Enumeration getHeaders(String s) {
         return null;
     }
 
     @Override
-    public HttpResponse doGetRequest(URL url) throws IOException {
+    public Enumeration getHeaderNames() {
         return null;
     }
 
     @Override
-    public HttpResponse doHeadRequest(URL url, boolean b) throws IOException {
+    public int getIntHeader(String s) {
+        return 0;
+    }
+
+    @Override
+    public String getMethod() {
         return null;
     }
 
     @Override
-    public HttpResponse doGetRequest(URL url, boolean b) throws IOException {
+    public String getPathInfo() {
         return null;
     }
 
     @Override
-    public HttpResponse doHeadRequest(URL url, String[] strings, String[] strings1) throws IOException {
+    public String getPathTranslated() {
         return null;
     }
 
     @Override
-    public HttpResponse doGetRequest(URL url, String[] strings, String[] strings1) throws IOException {
+    public String getContextPath() {
         return null;
     }
 
     @Override
-    public HttpResponse doHeadRequest(URL url, String[] strings, String[] strings1, boolean b) throws IOException {
+    public String getQueryString() {
         return null;
     }
 
     @Override
-    public HttpResponse doGetRequest(URL url, String[] strings, String[] strings1, boolean b) throws IOException {
+    public String getRemoteUser() {
         return null;
+    }
+
+    @Override
+    public boolean isUserInRole(String s) {
+        return false;
+    }
+
+    @Override
+    public Principal getUserPrincipal() {
+        return null;
+    }
+
+    @Override
+    public String getRequestedSessionId() {
+        return null;
+    }
+
+    @Override
+    public String getRequestURI() {
+        return null;
+    }
+
+    @Override
+    public StringBuffer getRequestURL() {
+        return null;
+    }
+
+    @Override
+    public String getServletPath() {
+        return null;
+    }
+
+    @Override
+    public HttpSession getSession(boolean b) {
+        return null;
+    }
+
+    @Override
+    public HttpSession getSession() {
+        return null;
+    }
+
+    @Override
+    public boolean isRequestedSessionIdValid() {
+        return false;
+    }
+
+    @Override
+    public boolean isRequestedSessionIdFromCookie() {
+        return false;
+    }
+
+    @Override
+    public boolean isRequestedSessionIdFromURL() {
+        return false;
+    }
+
+    @Override
+    public boolean isRequestedSessionIdFromUrl() {
+        return false;
+    }
+
+    @Override
+    public Object getAttribute(String s) {
+        return null;
+    }
+
+    @Override
+    public Enumeration getAttributeNames() {
+        return null;
+    }
+
+    @Override
+    public String getCharacterEncoding() {
+        return null;
+    }
+
+    @Override
+    public void setCharacterEncoding(String s) throws UnsupportedEncodingException {
+
+    }
+
+    @Override
+    public int getContentLength() {
+        return 0;
+    }
+
+    @Override
+    public String getContentType() {
+        return null;
+    }
+
+    @Override
+    public ServletInputStream getInputStream() throws IOException {
+        return null;
+    }
+
+    @Override
+    public String getParameter(String s) {
+        return null;
+    }
+
+    @Override
+    public Enumeration getParameterNames() {
+        return null;
+    }
+
+    @Override
+    public String[] getParameterValues(String s) {
+        return new String[0];
+    }
+
+    @Override
+    public Map getParameterMap() {
+        return null;
+    }
+
+    @Override
+    public String getProtocol() {
+        return null;
+    }
+
+    @Override
+    public String getScheme() {
+        return null;
+    }
+
+    @Override
+    public String getServerName() {
+        return null;
+    }
+
+    @Override
+    public int getServerPort() {
+        return 0;
+    }
+
+    @Override
+    public BufferedReader getReader() throws IOException {
+        return null;
+    }
+
+    @Override
+    public String getRemoteAddr() {
+        return null;
+    }
+
+    @Override
+    public String getRemoteHost() {
+        return null;
+    }
+
+    @Override
+    public void setAttribute(String s, Object o) {
+
+    }
+
+    @Override
+    public void removeAttribute(String s) {
+
+    }
+
+    @Override
+    public Locale getLocale() {
+        return null;
+    }
+
+    @Override
+    public Enumeration getLocales() {
+        return null;
+    }
+
+    @Override
+    public boolean isSecure() {
+        return false;
+    }
+
+    @Override
+    public RequestDispatcher getRequestDispatcher(String s) {
+        return null;
+    }
+
+    @Override
+    public String getRealPath(String s) {
+        return null;
+    }
+
+    @Override
+    public int getRemotePort() {
+        return 0;
+    }
+
+    @Override
+    public String getLocalName() {
+        return null;
+    }
+
+    @Override
+    public String getLocalAddr() {
+        return null;
+    }
+
+    @Override
+    public int getLocalPort() {
+        return 0;
     }
 }

@@ -1,11 +1,12 @@
 package mvc.router;
 
-import com.sun.deploy.net.HttpRequest;
 import mvc.controller.Controller;
 import mvc.controller.ErrorController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by adam on 25/02/2017.
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test;
 class RouteCallerTest {
     private RouteCaller routeCaller;
     private Route route = new BasicRoute("mvc.controller");
-    private HttpRequest httpRequest = new RequestMocUp();
+    private HttpServletRequest httpRequest = new RequestMocUp();
 
     @BeforeEach
     void setUp() {

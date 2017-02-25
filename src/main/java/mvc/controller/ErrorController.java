@@ -1,13 +1,13 @@
 package mvc.controller;
 
 
-import com.sun.deploy.net.HttpRequest;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by adam on 25/02/2017.
  */
 public class ErrorController extends Controller{
-    public ErrorController(HttpRequest request) {
+    public ErrorController(HttpServletRequest request) {
         super(request);
     }
 
