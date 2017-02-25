@@ -1,6 +1,7 @@
 package mvc.controller;
 
-import org.apache.http.HttpRequest;
+
+import com.sun.deploy.net.HttpRequest;
 
 /**
  * Created by adam on 25/02/2017.

@@ -1,99 +1,63 @@
 package mvc.router;
 
-import org.apache.http.*;
-import org.apache.http.params.HttpParams;
+
+import com.sun.deploy.net.HttpRequest;
+import com.sun.deploy.net.HttpResponse;
+
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * Created by adam on 25/02/2017.
  */
-public class RequestMocUp implements HttpRequest {
+public class RequestMocUp implements HttpRequest{
     @Override
-    public RequestLine getRequestLine() {
+    public HttpResponse doGetRequestEX(URL url, long l) throws IOException {
         return null;
     }
 
     @Override
-    public ProtocolVersion getProtocolVersion() {
+    public HttpResponse doGetRequestEX(URL url, String[] strings, String[] strings1, long l) throws IOException {
         return null;
     }
 
     @Override
-    public boolean containsHeader(String s) {
-        return false;
-    }
-
-    @Override
-    public Header[] getHeaders(String s) {
-        return new Header[0];
-    }
-
-    @Override
-    public Header getFirstHeader(String s) {
+    public HttpResponse doHeadRequest(URL url) throws IOException {
         return null;
     }
 
     @Override
-    public Header getLastHeader(String s) {
+    public HttpResponse doGetRequest(URL url) throws IOException {
         return null;
     }
 
     @Override
-    public Header[] getAllHeaders() {
-        return new Header[0];
-    }
-
-    @Override
-    public void addHeader(Header header) {
-
-    }
-
-    @Override
-    public void addHeader(String s, String s1) {
-
-    }
-
-    @Override
-    public void setHeader(Header header) {
-
-    }
-
-    @Override
-    public void setHeader(String s, String s1) {
-
-    }
-
-    @Override
-    public void setHeaders(Header[] headers) {
-
-    }
-
-    @Override
-    public void removeHeader(Header header) {
-
-    }
-
-    @Override
-    public void removeHeaders(String s) {
-
-    }
-
-    @Override
-    public HeaderIterator headerIterator() {
+    public HttpResponse doHeadRequest(URL url, boolean b) throws IOException {
         return null;
     }
 
     @Override
-    public HeaderIterator headerIterator(String s) {
+    public HttpResponse doGetRequest(URL url, boolean b) throws IOException {
         return null;
     }
 
     @Override
-    public HttpParams getParams() {
+    public HttpResponse doHeadRequest(URL url, String[] strings, String[] strings1) throws IOException {
         return null;
     }
 
     @Override
-    public void setParams(HttpParams httpParams) {
+    public HttpResponse doGetRequest(URL url, String[] strings, String[] strings1) throws IOException {
+        return null;
+    }
 
+    @Override
+    public HttpResponse doHeadRequest(URL url, String[] strings, String[] strings1, boolean b) throws IOException {
+        return null;
+    }
+
+    @Override
+    public HttpResponse doGetRequest(URL url, String[] strings, String[] strings1, boolean b) throws IOException {
+        return null;
     }
 }

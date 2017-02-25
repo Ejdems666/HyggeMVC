@@ -1,8 +1,8 @@
 package mvc.router;
 
+import com.sun.deploy.net.HttpRequest;
 import mvc.controller.Controller;
 import mvc.controller.ErrorController;
-import org.apache.http.HttpRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
