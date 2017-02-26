@@ -1,6 +1,5 @@
 package hyggemvc.controller;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,13 +24,6 @@ public abstract class Controller {
 
         if(request.getAttribute("title") == null) {
             request.setAttribute("title",template);
-        }
-
-        RequestDispatcher view = request.getRequestDispatcher("index.jsp");
-        try {
-            view.forward(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
