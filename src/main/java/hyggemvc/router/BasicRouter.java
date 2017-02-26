@@ -18,6 +18,13 @@ public class BasicRouter implements Router {
                 String potentialController = route.getControllerClass();
                 if (methodExists(potentialController, potentialMethod)) {
                     route.setMethodName(potentialMethod);
+                } else {
+                    route.setControllerName(urlParser.toCamelCaseWithFirstUpperCase(urlParts[0]));
+                    if (methodExists(route.getControllerClass(), "index")) {
+                        route.setMethodName("index");
+                    } else {
+                        route.setErrorRoute(new ClassNotFoundException(),"notFound");
+                    }
                 }
                 break;
             case 2:
