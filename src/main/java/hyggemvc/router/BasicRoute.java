@@ -4,7 +4,7 @@ package hyggemvc.router;
  * Created by adam on 25/02/2017.
  */
 public class BasicRoute implements Route {
-    protected String controllerPackage;
+    private String controllerPackage;
     private String controllerName = "Default";
     private String methodName = "index";
     private Object argument = null;
@@ -35,19 +35,23 @@ public class BasicRoute implements Route {
     }
 
     @Override
+    public void setControllerPackage(String controllerPackage) {
+        this.controllerPackage = controllerPackage;
+    }
+
+    @Override
     public void setControllerName(String controllerClass) {
         this.controllerName = controllerClass;
     }
 
     @Override
-    public String getAssembledControllerClass() {
-        return controllerName = controllerPackage + "." + controllerName + "Controller";
+    public String getControllerClass() {
+        return controllerPackage + "." + controllerName + "Controller";
     }
 
     @Override
     public void setErrorRoute(Exception e, String errorType){
         controllerName = "Error";
-        controllerPackage = "hyggemvc.controller";
         methodName = errorType;
         argument = e;
     }

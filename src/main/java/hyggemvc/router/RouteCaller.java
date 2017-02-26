@@ -15,7 +15,7 @@ public class RouteCaller {
     private final Route route;
     private final HttpServletRequest request;
     private final HttpServletResponse response;
-    private boolean looping = false;
+    private boolean notFoundWasCalled = false;
 
     public RouteCaller(Route route, HttpServletRequest request, HttpServletResponse response) {
         this.route = route;
@@ -29,12 +29,13 @@ public class RouteCaller {
             controller = createController();
             callMethod(controller);
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | IllegalArgumentException e) {
-            if (!looping) {
+            if (!notFoundWasCalled) {
                 route.setErrorRoute(e, "notFound");
+                notFoundWasCalled = true;
                 callRoute();
-                looping = true;
             } else {
-                e.printStackTrace();
+                route.setControllerPackage("hyggemvc.controller");
+                callRoute();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,7 +44,7 @@ public class RouteCaller {
         }
     }
     private Controller createController() throws Exception {
-        Class<?> controllerClass = Class.forName(route.getAssembledControllerClass());
+        Class<?> controllerClass = Class.forName(route.getControllerClass());
         Constructor<?> constructor = controllerClass.getConstructor(HttpServletRequest.class,HttpServletResponse.class);
         return ((Controller) constructor.newInstance(request,response));
     }
