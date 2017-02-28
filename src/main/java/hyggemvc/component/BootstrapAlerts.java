@@ -11,7 +11,9 @@ public class BootstrapAlerts implements Component{
 
     public BootstrapAlerts(HttpSession session) {
         this.session = session;
-        session.setAttribute("alerts",this);
+        if (session.getAttribute("alerts") == null) {
+            session.setAttribute("alerts",this);
+        }
     }
 
     public void addAlert(Type type, String message) {
