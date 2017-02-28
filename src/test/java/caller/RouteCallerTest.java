@@ -1,4 +1,4 @@
-package hyggemvc.router.caller;
+package caller;
 
 import hyggemvc.controller.Controller;
 import hyggemvc.controller.ErrorController;

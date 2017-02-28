@@ -1,5 +1,7 @@
-package hyggemvc.router;
-
+import hyggemvc.router.BasicRoute;
+import hyggemvc.router.BasicRouter;
+import hyggemvc.router.Route;
+import hyggemvc.router.Router;
 import hyggemvc.router.exceptions.TooManyArgumentsException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
