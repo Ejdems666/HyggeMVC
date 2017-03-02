@@ -3,6 +3,7 @@ package hyggemvc.controller;
 import hyggemvc.component.BootstrapAlerts;
 import hyggemvc.component.Component;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -23,13 +24,18 @@ public abstract class Controller {
         this.response = response;
     }
 
-    protected void setTemplateOutput(String template) {
+    protected void renderTemplate(String template) {
         response.setContentType("text/html");
         request.setAttribute("template", template);
         request.setAttribute("alerts", getAlerts());
 
         if (request.getAttribute("title") == null) {
             request.setAttribute("title", template);
+        }
+        try {
+            request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            e.printStackTrace();
         }
     }
     private Component getAlerts() {
@@ -53,7 +59,7 @@ public abstract class Controller {
         return wasRedirected;
     }
 
-    public boolean templateWasOutputed() {
+    public boolean templateWasRendered() {
         return request.getAttribute("template") != null;
     }
 
