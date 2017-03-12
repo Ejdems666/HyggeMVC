@@ -1,4 +1,6 @@
-package hyggemvc.controller;
+package controller;
+
+import hyggemvc.controller.Controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,5 +13,13 @@ public class DefaultController extends Controller {
         super(request, response);
     }
 
-    public void test(){}
+    public String called = null;
+
+    public void index(){
+        called = "index";
+    }
+
+    public void defaultTest(){
+        called = "defaultTest";
+    }
 }

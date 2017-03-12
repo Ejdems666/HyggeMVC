@@ -12,7 +12,7 @@ public class ErrorController extends Controller{
         super(request, response);
     }
 
-    public void notFound(Object arg) {
+    public void notFound(Exception exception) {
         return;
     }
 }

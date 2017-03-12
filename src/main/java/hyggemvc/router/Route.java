@@ -1,22 +1,43 @@
 package hyggemvc.router;
 
 /**
- * Created by adam on 25/02/2017.
+ * Created by adam on 10/03/2017.
  */
-public interface Route {
-    String getControllerClass();
+public class Route {
+    private String pattern;
+    private final String defaultController;
+    private final String defaultMethod;
 
-    void setErrorRoute(Exception e, String errorType);
+    public Route(String pattern, String defaultController, String defaultMethod) {
+        this.pattern = pattern;
+        this.defaultController = defaultController;
+        this.defaultMethod = defaultMethod;
+    }
 
-    void setControllerName(String controllerName);
+    public String getPattern() {
+        return pattern;
+    }
 
-    String getMethodName();
+    public String getDefaultController() {
+        return defaultController;
+    }
 
-    void setMethodName(String methodName);
+    public String getDefaultMethod() {
+        return defaultMethod;
+    }
 
-    Object getArgument();
+    public enum Element {
+        CONTROLLER("<controller>"),METHOD("<method>"),NUMBER("<number>"),STRING("<string>");
 
-    void setArgument(Object argument);
+        private final String flag;
 
-    void setControllerPackage(String controllerPackage);
+        Element(String flag) {
+            this.flag = flag;
+        }
+
+        @Override
+        public String toString() {
+            return flag;
+        }
+    }
 }

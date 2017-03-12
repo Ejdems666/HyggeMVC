@@ -1,48 +1,79 @@
 package hyggemvc.router;
 
-import hyggemvc.router.exceptions.TooManyArgumentsException;
+import hyggemvc.router.exceptions.DefaultElementValueInUrlException;
+import hyggemvc.router.exceptions.NoRouteMatchedException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by adam on 21/02/2017.
  */
 public class BasicRouter implements Router {
-    private UrlParser urlParser = new UrlParser();
+    private List<Route> routes = new ArrayList<>();
 
-    @Override
-    public void inflateRoute(Route route, String url) {
-        if (url.equals("/")) return;
-        String[] urlParts = url.substring(1).split("/");
-        switch (urlParts.length) {
-            case 1:
-                String potentialMethod = urlParser.toCamelCase(urlParts[0]);
-                String potentialController = route.getControllerClass();
-                if (methodExists(potentialController, potentialMethod)) {
-                    route.setMethodName(potentialMethod);
-                } else {
-                    route.setControllerName(urlParser.toCamelCaseWithFirstUpperCase(urlParts[0]));
-                    if (methodExists(route.getControllerClass(), "index")) {
-                        route.setMethodName("index");
-                    } else {
-                        route.setErrorRoute(new ClassNotFoundException(),"notFound");
-                    }
-                }
-                break;
-            case 2:
-                route.setControllerName(urlParser.toCamelCaseWithFirstUpperCase(urlParts[0]));
-                route.setMethodName(urlParser.toCamelCase(urlParts[1]));
-                break;
-            default:
-                route.setErrorRoute(new TooManyArgumentsException(), "notFound");
-        }
+    public BasicRouter(Route firstRoute) {
+        routes.add(firstRoute);
     }
 
-    private boolean methodExists(String controller, String method) {
-        try {
-            Class<?> controllerClass = Class.forName(controller);
-            controllerClass.getDeclaredMethod(method);
-        } catch (NoSuchMethodException | ClassNotFoundException e) {
-            return false;
+    public void addRoute(Route route) {
+        routes.add(route);
+    }
+
+    @Override
+    public RouteCallable getRouteCallable(String packageName, String url) {
+        url = url.substring(1);
+        String potentialController;
+        String potentialMethod;
+        UrlParser urlParser;
+        RouteCallable routeCallable;
+        for (Route route : routes) {
+            routeCallable = null;
+            urlParser = new UrlParser(url,route);
+            if (urlParser.matches()) {
+                try {
+                    potentialController = urlParser.extractControllerName();
+                    potentialMethod = urlParser.extractMethodName();
+                    if (onlyOneCallableIsPresent(potentialController, potentialMethod, route)) {
+                        try {
+                            routeCallable = new RouteCallable(
+                                    packageName,
+                                    route.getDefaultController(),
+                                    Notator.toCamelCase(potentialController),
+                                    urlParser.getParameterTypes(),
+                                    urlParser.getParameters()
+                            );
+                        } catch (NoSuchMethodException | ClassNotFoundException e) {
+                            routeCallable =  new RouteCallable(
+                                    packageName,
+                                    Notator.toCamelCaseWithFirstUpperCase(potentialController),
+                                    Notator.toCamelCase(potentialMethod),
+                                    urlParser.getParameterTypes(),
+                                    urlParser.getParameters()
+                            );
+                        }
+                    } else {
+                        routeCallable =  new RouteCallable(
+                                packageName,
+                                Notator.toCamelCaseWithFirstUpperCase(potentialController),
+                                Notator.toCamelCase(potentialMethod),
+                                urlParser.getParameterTypes(),
+                                urlParser.getParameters()
+                        );
+                    }
+
+                } catch (DefaultElementValueInUrlException | NoSuchMethodException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                if (routeCallable != null) {
+                    return routeCallable;
+                }
+            }
         }
-        return true;
+        return RouteCallable.notFoundCallable(packageName,new NoRouteMatchedException());
+    }
+
+    private boolean onlyOneCallableIsPresent(String potentialController, String potentialMethod, Route route) {
+        return potentialMethod.equals(route.getDefaultMethod()) && !potentialController.equals(route.getDefaultController());
     }
 }
