@@ -13,6 +13,5 @@ public class ErrorController extends Controller{
     }
 
     public void notFound(Exception exception) {
-        exception.printStackTrace();
     }
 }

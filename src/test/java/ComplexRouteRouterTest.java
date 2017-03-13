@@ -3,7 +3,6 @@ import caller.ResponseMockUp;
 import controller.ApiController;
 import controller.TestController;
 import hyggemvc.controller.Controller;
-import hyggemvc.controller.ErrorController;
 import hyggemvc.router.BasicRouter;
 import hyggemvc.router.Route;
 import hyggemvc.router.RouteCallable;
@@ -69,6 +68,7 @@ class ComplexRouteRouterTest {
         BasicRouter router = new BasicRouter(getRouteWithMultipleParameters());
         RouteCallable routeCallable = router.getRouteCallable("controller", "/test/multiple/1");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
-        assertTrue(controller instanceof ErrorController);
+        assertTrue(controller instanceof TestController);
+        assertEquals(((TestController) controller).called, "multiple1nullnull");
     }
 }

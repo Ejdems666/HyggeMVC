@@ -58,11 +58,7 @@ public class UrlParser {
         while (iterator.hasNext()) {
             Map.Entry<Integer, Class<?>> entry = iterator.next();
             attribute = extractAttributeByGroup(entry.getValue(), entry.getKey());
-            if (attribute != null) {
                 parameters.add(attribute);
-            } else {
-                iterator.remove();
-            }
         }
     }
 

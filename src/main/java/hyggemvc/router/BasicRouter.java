@@ -46,7 +46,6 @@ public class BasicRouter implements Router {
                             );
                             return routeCallable;
                         } catch (NoSuchMethodException | ClassNotFoundException e) {
-                            e.printStackTrace();
                             // TODO: route monitoring would come here and to the other catch block
                         }
                     }
@@ -59,9 +58,7 @@ public class BasicRouter implements Router {
                     );
                     return routeCallable;
 
-                } catch (DefaultNameOfCallableInUrlException | NoSuchMethodException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+                } catch (DefaultNameOfCallableInUrlException | NoSuchMethodException | ClassNotFoundException e) {}
             }
         }
         return RouteCallable.notFoundCallable(packageName,new NoRouteMatchedException());
