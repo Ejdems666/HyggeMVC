@@ -1,6 +1,6 @@
 package hyggemvc.router;
 
-import hyggemvc.router.exceptions.DefaultElementValueInUrlException;
+import hyggemvc.router.exceptions.DefaultNameOfCallableInUrlException;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -10,13 +10,13 @@ import java.util.regex.Pattern;
  * Created by adam on 12/03/2017.
  */
 public class UrlParser {
+    private final Route route;
     private Integer controllerGroup = null;
     private Integer methodGroup = null;
-    private Map<Integer,Class<?>> parameterTypes = new HashMap<>();
+    private Map<Integer, Class<?>> parameterTypes = new HashMap<>();
     private List<Object> parameters = new ArrayList<>();
     private String pattern;
     private Matcher matcher;
-    private final Route route;
 
     public UrlParser(String url, Route route) {
         pattern = detectAndReplaceRouteElementsInPattern(route.getPattern());
@@ -41,11 +41,11 @@ public class UrlParser {
                 pattern = pattern.replace(Route.Element.METHOD.toString(), "[a-z\\-]+");
             }
             if (patternParts[i].contains(Route.Element.NUMBER.toString())) {
-                parameterTypes.put(group++,Integer.class);
+                parameterTypes.put(group++, Integer.class);
                 pattern = pattern.replace(Route.Element.NUMBER.toString(), "\\d+");
             }
             if (patternParts[i].contains(Route.Element.STRING.toString())) {
-                parameterTypes.put(group++,String.class);
+                parameterTypes.put(group++, String.class);
                 pattern = pattern.replace(Route.Element.STRING.toString(), "[A-Za-z0-9\\-\\_]+");
             }
         }
@@ -57,7 +57,7 @@ public class UrlParser {
         Iterator<Map.Entry<Integer, Class<?>>> iterator = parameterTypes.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<Integer, Class<?>> entry = iterator.next();
-            attribute = extractAttributeByGroup(entry.getValue(),entry.getKey());
+            attribute = extractAttributeByGroup(entry.getValue(), entry.getKey());
             if (attribute != null) {
                 parameters.add(attribute);
             } else {
@@ -65,10 +65,10 @@ public class UrlParser {
             }
         }
     }
-    private Object extractAttributeByGroup(Class<?> type, int group){
+
+    private Object extractAttributeByGroup(Class<?> type, int group) {
         String rawAttribute = extractElementByGroup(group);
-        if (rawAttribute == null) return null;
-        if (type.equals(Integer.class)) {
+        if (rawAttribute != null && type.equals(Integer.class)) {
             return Integer.parseInt(rawAttribute);
         }
         return rawAttribute;
@@ -78,26 +78,26 @@ public class UrlParser {
         return matcher.matches();
     }
 
-    public String extractControllerName() throws DefaultElementValueInUrlException {
+    public String extractControllerName() throws DefaultNameOfCallableInUrlException {
         String controller = extractElementByGroup(controllerGroup);
         if (controllerGroup == null || controller == null) {
             return route.getDefaultController();
         } else if (controller.equals(route.getDefaultController())) {
-            throw new DefaultElementValueInUrlException(controller,"Controller");
+            throw new DefaultNameOfCallableInUrlException(controller, "Controller");
         }
         return controller;
     }
 
-    public String extractMethodName() throws DefaultElementValueInUrlException {
+    public String extractMethodName() throws DefaultNameOfCallableInUrlException {
         String method = extractElementByGroup(methodGroup);
         if (methodGroup == null || method == null) {
             return route.getDefaultMethod();
-        }
-        if (method.equals(route.getDefaultController())) {
-            throw new DefaultElementValueInUrlException(method,"Method");
+        } else if (method.equals(route.getDefaultMethod())) {
+            throw new DefaultNameOfCallableInUrlException(method, "Method");
         }
         return method;
     }
+
     private String extractElementByGroup(int group) {
         if (group > 1) {
             String elementWithSlash = matcher.group(group);
@@ -110,6 +110,7 @@ public class UrlParser {
     public Class<?>[] getParameterTypes() {
         return parameterTypes.values().toArray(new Class<?>[parameterTypes.size()]);
     }
+
     public Object[] getParameters() {
         return parameters.toArray();
     }

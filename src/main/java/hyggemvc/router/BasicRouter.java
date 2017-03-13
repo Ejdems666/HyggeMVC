@@ -1,6 +1,6 @@
 package hyggemvc.router;
 
-import hyggemvc.router.exceptions.DefaultElementValueInUrlException;
+import hyggemvc.router.exceptions.DefaultNameOfCallableInUrlException;
 import hyggemvc.router.exceptions.NoRouteMatchedException;
 
 import java.util.ArrayList;
@@ -28,13 +28,14 @@ public class BasicRouter implements Router {
         UrlParser urlParser;
         RouteCallable routeCallable;
         for (Route route : routes) {
-            routeCallable = null;
             urlParser = new UrlParser(url,route);
             if (urlParser.matches()) {
                 try {
                     potentialController = urlParser.extractControllerName();
                     potentialMethod = urlParser.extractMethodName();
-                    if (onlyOneCallableIsPresent(potentialController, potentialMethod, route)) {
+                    // This happens only when <controller>/<method> order is respected in current route
+                    // and url looks like "/example" which can be both DefaultController.example or ExampleController.index
+                    if (onlyPottentialControllerWasExtracted(potentialController, potentialMethod, route)) {
                         try {
                             routeCallable = new RouteCallable(
                                     packageName,
@@ -43,37 +44,30 @@ public class BasicRouter implements Router {
                                     urlParser.getParameterTypes(),
                                     urlParser.getParameters()
                             );
+                            return routeCallable;
                         } catch (NoSuchMethodException | ClassNotFoundException e) {
-                            routeCallable =  new RouteCallable(
-                                    packageName,
-                                    Notator.toCamelCaseWithFirstUpperCase(potentialController),
-                                    Notator.toCamelCase(potentialMethod),
-                                    urlParser.getParameterTypes(),
-                                    urlParser.getParameters()
-                            );
+                            e.printStackTrace();
+                            // TODO: route monitoring would come here and to the other catch block
                         }
-                    } else {
-                        routeCallable =  new RouteCallable(
-                                packageName,
-                                Notator.toCamelCaseWithFirstUpperCase(potentialController),
-                                Notator.toCamelCase(potentialMethod),
-                                urlParser.getParameterTypes(),
-                                urlParser.getParameters()
-                        );
                     }
-
-                } catch (DefaultElementValueInUrlException | NoSuchMethodException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-                if (routeCallable != null) {
+                    routeCallable =  new RouteCallable(
+                            packageName,
+                            Notator.toCamelCaseWithFirstUpperCase(potentialController),
+                            Notator.toCamelCase(potentialMethod),
+                            urlParser.getParameterTypes(),
+                            urlParser.getParameters()
+                    );
                     return routeCallable;
+
+                } catch (DefaultNameOfCallableInUrlException | NoSuchMethodException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
         }
         return RouteCallable.notFoundCallable(packageName,new NoRouteMatchedException());
     }
 
-    private boolean onlyOneCallableIsPresent(String potentialController, String potentialMethod, Route route) {
+    private boolean onlyPottentialControllerWasExtracted(String potentialController, String potentialMethod, Route route) {
         return potentialMethod.equals(route.getDefaultMethod()) && !potentialController.equals(route.getDefaultController());
     }
 }

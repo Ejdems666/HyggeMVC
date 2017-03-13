@@ -3,6 +3,7 @@ import caller.ResponseMockUp;
 import controller.DefaultController;
 import controller.TestController;
 import hyggemvc.controller.Controller;
+import hyggemvc.controller.ErrorController;
 import hyggemvc.router.BasicRouter;
 import hyggemvc.router.Route;
 import hyggemvc.router.RouteCallable;
@@ -58,5 +59,12 @@ class BasicRouteRouterTest {
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof DefaultController);
         assertEquals(((DefaultController) controller).called, "defaultTest");
+    }
+
+    @Test
+    void testWrongUrl() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        RouteCallable routeCallable = router.getRouteCallable("controller", "/23");
+        Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
+        assertTrue(controller instanceof ErrorController);
     }
 }
