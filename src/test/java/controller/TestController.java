@@ -24,4 +24,7 @@ public class TestController extends Controller {
     public void number(Integer number) {
         called = "number"+number;
     }
+    public void multiple(Integer number,String text,Integer number2) {
+        called = "multiple"+number+text+number2;
+    }
 }
