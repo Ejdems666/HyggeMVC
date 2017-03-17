@@ -70,6 +70,5 @@ class ComplexRouteRouterTest {
         RouteCallable routeCallable = router.getRouteCallable("controller", "/test/multiple/1");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof ErrorController);
-
     }
 }
