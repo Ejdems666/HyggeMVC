@@ -25,19 +25,4 @@ public class Route {
     public String getDefaultMethod() {
         return defaultMethod;
     }
-
-    public enum Element {
-        CONTROLLER("<controller>"),METHOD("<method>"),NUMBER("<number>"),STRING("<string>");
-
-        private final String flag;
-
-        Element(String flag) {
-            this.flag = flag;
-        }
-
-        @Override
-        public String toString() {
-            return flag;
-        }
-    }
 }

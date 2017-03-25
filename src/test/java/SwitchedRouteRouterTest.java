@@ -24,7 +24,7 @@ class SwitchedRouteRouterTest {
 
     @BeforeEach
     void setUp() {
-        firstRoute = new Route("(<method>)?(/<controller>)?", "Default", "index");
+        firstRoute = new Route("(?<method>[a-z\\-]+)?(?<controller>/[a-z\\-]+)?", "Default", "index");
         router = new BasicRouter(firstRoute);
     }
 

@@ -21,7 +21,7 @@ class ComplexRouteRouterTest {
 
     @Test
     void testRouteOfUrlWithEmptyMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Route firstRoute = new Route("(<controller>)?(/<method>)?(/<number>)?", "Default", "index");
+        Route firstRoute = getStandartRoute();
         BasicRouter router = new BasicRouter(firstRoute);
         RouteCallable routeCallable = router.getRouteCallable("controller", "/test/number/1");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
@@ -29,22 +29,38 @@ class ComplexRouteRouterTest {
         assertEquals(((TestController) controller).called, "number1");
     }
 
+    private Route getStandartRoute() {
+        return new Route(
+                "(?<controller>[a-z\\-]+)?(?<method>/[a-z\\-]+)?(?<int0>/\\d+)?",
+                "Default",
+                "index"
+        );
+    }
+
     @Test
     void testRouteWithFixedPrefixNotUsingFirstRouteRule() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Route firstRoute = new Route("(<controller>)?(/<method>)?(/<number>)?", "Default", "index");
+        Route firstRoute = getStandartRoute();
         BasicRouter router = new BasicRouter(firstRoute);
-        router.addRoute(new Route("api(/<method>)?(/<number>)?", "Api", "index"));
+        router.addRoute(getApiRoute());
         RouteCallable routeCallable = router.getRouteCallable("controller", "/api/1");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof ApiController);
         assertEquals(((ApiController) controller).called, "index1");
     }
 
+    private Route getApiRoute() {
+        return new Route(
+                "api(?<method>/[a-z\\-]+)?(?<int0>/\\d+)?",
+                "Api",
+                "index"
+        );
+    }
+
     @Test
-    void testRouteStandardRouteNotBeanFirstRule() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Route firstRoute = new Route("api(/<method>)?(/<number>)?", "Api", "index");
+    void testRouteStandardRouteNotBeingFirstRule() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        Route firstRoute = getApiRoute();
         BasicRouter router = new BasicRouter(firstRoute);
-        router.addRoute(new Route("(<controller>)?(/<method>)?(/<number>)?", "Default", "index"));
+        router.addRoute(getStandartRoute());
         RouteCallable routeCallable = router.getRouteCallable("controller", "/test/number/1");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof TestController);
@@ -61,7 +77,11 @@ class ComplexRouteRouterTest {
     }
 
     private Route getRouteWithMultipleParameters() {
-        return new Route("(<controller>)?(/<method>)?(/<number>)?(/<string>)?(/<number>)?", "Default", "index");
+        return new Route(
+                "(?<controller>[a-z\\-]+)?(?<method>/[a-z\\-]+)?(?<int0>/\\d+)?(?<string1>/\\w+)?(?<int2>/\\d+)?",
+                "Default",
+                "index"
+        );
     }
 
     @Test

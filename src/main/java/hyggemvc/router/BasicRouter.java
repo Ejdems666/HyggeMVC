@@ -25,24 +25,24 @@ public class BasicRouter implements Router {
         url = url.substring(1);
         String potentialController;
         String potentialMethod;
-        UrlParser urlParser;
+        RouteMatcher routeMatcher;
         RouteCallable routeCallable;
         for (Route route : routes) {
-            urlParser = new UrlParser(url,route);
-            if (urlParser.matches()) {
+            routeMatcher = new RouteMatcher(url,route);
+            if (routeMatcher.matches()) {
                 try {
-                    potentialController = urlParser.extractControllerName();
-                    potentialMethod = urlParser.extractMethodName();
+                    potentialController = routeMatcher.extractControllerName();
+                    potentialMethod = routeMatcher.extractMethodName();
                     // This happens only when <controller>/<method> order is respected in current route
                     // and url looks like "/example" which can be both DefaultController.example or ExampleController.index
-                    if (onlyPottentialControllerWasExtracted(potentialController, potentialMethod, route)) {
+                    if (onlyPotentialControllerWasInUrl(potentialController, potentialMethod, route)) {
                         try {
                             routeCallable = new RouteCallable(
                                     packageName,
                                     route.getDefaultController(),
                                     Notator.toCamelCase(potentialController),
-                                    urlParser.getParameterTypes(),
-                                    urlParser.getParameters()
+                                    routeMatcher.getParameterTypes(),
+                                    routeMatcher.getParameters()
                             );
                             return routeCallable;
                         } catch (NoSuchMethodException | ClassNotFoundException e) {
@@ -53,8 +53,8 @@ public class BasicRouter implements Router {
                             packageName,
                             Notator.toCamelCaseWithFirstUpperCase(potentialController),
                             Notator.toCamelCase(potentialMethod),
-                            urlParser.getParameterTypes(),
-                            urlParser.getParameters()
+                            routeMatcher.getParameterTypes(),
+                            routeMatcher.getParameters()
                     );
                     return routeCallable;
 
@@ -64,7 +64,7 @@ public class BasicRouter implements Router {
         return RouteCallable.notFoundCallable(packageName,new NoRouteMatchedException());
     }
 
-    private boolean onlyPottentialControllerWasExtracted(String potentialController, String potentialMethod, Route route) {
+    private boolean onlyPotentialControllerWasInUrl(String potentialController, String potentialMethod, Route route) {
         return potentialMethod.equals(route.getDefaultMethod()) && !potentialController.equals(route.getDefaultController());
     }
 }

@@ -5,12 +5,13 @@ package hyggemvc.router;
  */
 public class Notator {
     public static String toCamelCaseWithFirstUpperCase(String url){
-        StringBuilder controllerName = new StringBuilder();
+        return toCamelCase(ucFirst(url));
+    }
+
+    public static String ucFirst(String url) {
         String withoutFirstLetter = url.substring(1, url.length());
         String firstLetter = url.substring(0, 1).toUpperCase();
-        controllerName.append(firstLetter).append(withoutFirstLetter);
-
-        return toCamelCase(controllerName.toString());
+        return firstLetter + withoutFirstLetter;
     }
 
     public static String toCamelCase(String url){

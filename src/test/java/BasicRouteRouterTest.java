@@ -25,7 +25,7 @@ class BasicRouteRouterTest {
 
     @BeforeEach
     void setUp() {
-        firstRoute = new Route("(<controller>)?(/<method>)?", "Default", "index");
+        firstRoute = new Route("(?<controller>[a-z\\-]+)?(?<method>/[a-z\\-]+)?", "Default", "index");
         router = new BasicRouter(firstRoute);
     }
 
