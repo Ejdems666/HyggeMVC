@@ -10,13 +10,13 @@ import java.util.regex.Pattern;
  * Created by adam on 12/03/2017.
  * Identifies module, controller, method and parameters in url according to regex route
  */
-public class RouteMatcher {
+public class UrlMatcher {
     private final Route route;
     private List<Class<?>> parameterTypes = new ArrayList<>();
     private List<Object> parameters = new ArrayList<>();
     private Matcher matcher;
 
-    public RouteMatcher(String url, Route route) {
+    public UrlMatcher(String url, Route route) {
         Pattern regex = Pattern.compile(route.getPattern());
         matcher = regex.matcher(url);
         this.route = route;

@@ -67,4 +67,18 @@ class BasicRouteRouterTest {
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof ErrorController);
     }
+
+    @Test
+    void testUrlWithDefaultValue() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        RouteCallable routeCallable = router.getRouteCallable("controller", "/default");
+        Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
+        assertTrue(controller instanceof ErrorController);
+    }
+
+    @Test
+    void testUrlWithDefaultValueInMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        RouteCallable routeCallable = router.getRouteCallable("controller", "/test/index");
+        Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
+        assertTrue(controller instanceof ErrorController);
+    }
 }

@@ -14,6 +14,12 @@ public class Notator {
         return firstLetter + withoutFirstLetter;
     }
 
+    public static String lcFirst(String url) {
+        String withoutFirstLetter = url.substring(1, url.length());
+        String firstLetter = url.substring(0, 1).toLowerCase();
+        return firstLetter + withoutFirstLetter;
+    }
+
     public static String toCamelCase(String url){
         StringBuilder cleanUrl = new StringBuilder();
         String newWordFirstLetter;

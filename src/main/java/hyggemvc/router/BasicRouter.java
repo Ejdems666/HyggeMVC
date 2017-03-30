@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class BasicRouter implements Router {
     private List<Route> routes = new ArrayList<>();
+    private String packageName;
 
     public BasicRouter(Route firstRoute) {
         routes.add(firstRoute);
@@ -22,49 +23,69 @@ public class BasicRouter implements Router {
 
     @Override
     public RouteCallable getRouteCallable(String packageName, String url) {
+        this.packageName = packageName;
         url = url.substring(1);
         String potentialController;
         String potentialMethod;
-        RouteMatcher routeMatcher;
-        RouteCallable routeCallable;
+        UrlMatcher urlMatcher;
         for (Route route : routes) {
-            routeMatcher = new RouteMatcher(url,route);
-            if (routeMatcher.matches()) {
+            urlMatcher = new UrlMatcher(url, route);
+            if (urlMatcher.matches()) {
                 try {
-                    potentialController = routeMatcher.extractControllerName();
-                    potentialMethod = routeMatcher.extractMethodName();
+                    potentialController = urlMatcher.extractControllerName();
+                    potentialMethod = urlMatcher.extractMethodName();
                     // This happens only when <controller>/<method> order is respected in current route
                     // and url looks like "/example" which can be both DefaultController.example or ExampleController.index
                     if (onlyPotentialControllerWasInUrl(potentialController, potentialMethod, route)) {
                         try {
-                            routeCallable = new RouteCallable(
+                            return new RouteCallable(
                                     packageName,
                                     route.getDefaultController(),
-                                    Notator.toCamelCase(potentialController),
-                                    routeMatcher.getParameterTypes(),
-                                    routeMatcher.getParameters()
+                                    potentialController,
+                                    urlMatcher.getParameterTypes(),
+                                    urlMatcher.getParameters()
                             );
-                            return routeCallable;
                         } catch (NoSuchMethodException | ClassNotFoundException e) {
-                            // TODO: route monitoring would come here and to the other catch block
+                            // TODO: route monitoring would come here
                         }
                     }
-                    routeCallable =  new RouteCallable(
-                            packageName,
-                            Notator.toCamelCaseWithFirstUpperCase(potentialController),
-                            Notator.toCamelCase(potentialMethod),
-                            routeMatcher.getParameterTypes(),
-                            routeMatcher.getParameters()
-                    );
-                    return routeCallable;
-
-                } catch (DefaultNameOfCallableInUrlException | NoSuchMethodException | ClassNotFoundException e) {}
+                    try {
+                        return new RouteCallable(
+                                packageName,
+                                Notator.ucFirst(potentialController),
+                                potentialMethod,
+                                urlMatcher.getParameterTypes(),
+                                urlMatcher.getParameters()
+                        );
+                    } catch (NoSuchMethodException | ClassNotFoundException e) {
+                        // TODO: route monitoring would come here
+                    }
+                } catch (DefaultNameOfCallableInUrlException e) {
+                    // TODO: again route monitoring here
+                }
             }
         }
-        return RouteCallable.notFoundCallable(packageName,new NoRouteMatchedException());
+        return RouteCallable.notFoundCallable(packageName, new NoRouteMatchedException());
     }
 
     private boolean onlyPotentialControllerWasInUrl(String potentialController, String potentialMethod, Route route) {
         return potentialMethod.equals(route.getDefaultMethod()) && !potentialController.equals(route.getDefaultController());
     }
+
+    private RouteCallable getRouteCallable(String controllerName, String methodName, UrlMatcher urlMatcher) {
+        try {
+            return new RouteCallable(
+                    packageName,
+                    controllerName,
+                    methodName,
+                    urlMatcher.getParameterTypes(),
+                    urlMatcher.getParameters()
+            );
+        } catch (NoSuchMethodException | ClassNotFoundException e) {
+            // TODO: route monitoring would come here
+        }
+        return null;
+    }
+
+
 }
