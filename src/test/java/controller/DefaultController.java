@@ -19,6 +19,10 @@ public class DefaultController extends Controller {
         called = "index";
     }
 
+    public void index(Integer number){
+        called = "index"+number;
+    }
+
     public void defaultTest(){
         called = "defaultTest";
     }

@@ -1,6 +1,7 @@
 import caller.RequestMocUp;
 import caller.ResponseMockUp;
 import controller.ApiController;
+import controller.DefaultController;
 import controller.TestController;
 import hyggemvc.controller.Controller;
 import hyggemvc.controller.ErrorController;
@@ -21,8 +22,7 @@ class ComplexRouteRouterTest {
 
     @Test
     void testRouteOfUrlWithEmptyMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Route firstRoute = getStandartRoute();
-        BasicRouter router = new BasicRouter(firstRoute);
+        BasicRouter router = new BasicRouter(getStandartRoute());
         RouteCallable routeCallable = router.getRouteCallable("controller", "/test/number/1");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof TestController);
@@ -31,10 +31,19 @@ class ComplexRouteRouterTest {
 
     private Route getStandartRoute() {
         return new Route(
-                "(?<controller>[a-z\\-]+)?(?<method>/[a-z\\-]+)?(?<int0>/\\d+)?",
+                "(?<controller>[a-z\\-]+)?(?<method>/[a-z\\-]+)?(?<int0>(/)?\\d+)?",
                 "Default",
                 "index"
         );
+    }
+
+    @Test
+    void testRouteOnlyWithNumber() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        BasicRouter router = new BasicRouter(getStandartRoute());
+        RouteCallable routeCallable = router.getRouteCallable("controller", "/1");
+        Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
+        assertTrue(controller instanceof DefaultController);
+        assertEquals(((DefaultController) controller).called, "index1");
     }
 
     @Test
