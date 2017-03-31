@@ -194,4 +194,15 @@ class ComplexRouteRouterTest {
         router.addRoute(new Route("(?<module>[a-z]+)(?<controller>/[a-z\\-]+)(?<method>/[a-z\\-]+)?", "Default", "index", "module"));
         return router;
     }
+
+    @Test
+    void testSpecificRoute() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        Router router = new Router(
+                new Route("test","Test","test")
+        );
+        RouteCallable routeCallable = router.getRouteCallable("controller", "/test");
+        Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
+        assertTrue(controller instanceof TestController);
+        assertEquals(((TestController) controller).called, "test");
+    }
 }
