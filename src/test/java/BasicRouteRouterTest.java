@@ -4,7 +4,7 @@ import controller.DefaultController;
 import controller.TestController;
 import hyggemvc.controller.Controller;
 import hyggemvc.controller.ErrorController;
-import hyggemvc.router.BasicRouter;
+import hyggemvc.router.Router;
 import hyggemvc.router.Route;
 import hyggemvc.router.RouteCallable;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,12 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class BasicRouteRouterTest {
 
     private Route firstRoute;
-    private BasicRouter router;
+    private Router router;
 
     @BeforeEach
     void setUp() {
         firstRoute = new Route("(?<controller>[a-z\\-]+)?(?<method>/[a-z\\-]+)?", "Default", "index");
-        router = new BasicRouter(firstRoute);
+        router = new Router(firstRoute);
     }
 
     @Test

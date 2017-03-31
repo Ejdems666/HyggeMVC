@@ -5,7 +5,7 @@ import controller.DefaultController;
 import controller.TestController;
 import hyggemvc.controller.Controller;
 import hyggemvc.controller.ErrorController;
-import hyggemvc.router.BasicRouter;
+import hyggemvc.router.Router;
 import hyggemvc.router.Route;
 import hyggemvc.router.RouteCallable;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ class ComplexRouteRouterTest {
 
     @Test
     void testRouteOfUrlWithEmptyMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        BasicRouter router = new BasicRouter(getStandartRoute());
+        Router router = new Router(getStandartRoute());
         RouteCallable routeCallable = router.getRouteCallable("controller", "/test/number/1");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof TestController);
@@ -39,7 +39,7 @@ class ComplexRouteRouterTest {
 
     @Test
     void testRouteOnlyWithNumber() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        BasicRouter router = new BasicRouter(getStandartRoute());
+        Router router = new Router(getStandartRoute());
         RouteCallable routeCallable = router.getRouteCallable("controller", "/1");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof DefaultController);
@@ -49,7 +49,7 @@ class ComplexRouteRouterTest {
     @Test
     void testRouteWithFixedPrefixNotUsingFirstRouteRule() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Route firstRoute = getStandartRoute();
-        BasicRouter router = new BasicRouter(firstRoute);
+        Router router = new Router(firstRoute);
         router.addRoute(getApiRoute());
         RouteCallable routeCallable = router.getRouteCallable("controller", "/api/1");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
@@ -68,7 +68,7 @@ class ComplexRouteRouterTest {
     @Test
     void testRouteStandardRouteNotBeingFirstRule() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Route firstRoute = getApiRoute();
-        BasicRouter router = new BasicRouter(firstRoute);
+        Router router = new Router(firstRoute);
         router.addRoute(getStandartRoute());
         RouteCallable routeCallable = router.getRouteCallable("controller", "/test/number/1");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
@@ -78,7 +78,7 @@ class ComplexRouteRouterTest {
 
     @Test
     void testRouteWithMultipleDifferentParameters() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        BasicRouter router = new BasicRouter(getRouteWithMultipleParameters());
+        Router router = new Router(getRouteWithMultipleParameters());
         RouteCallable routeCallable = router.getRouteCallable("controller", "/test/multiple/1/text/2");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof TestController);
@@ -95,7 +95,7 @@ class ComplexRouteRouterTest {
 
     @Test
     void testRouteWithCMSwitchParameterFirst() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        BasicRouter router = getRouterWithCMSwitchRoutes();
+        Router router = getRouterWithCMSwitchRoutes();
         RouteCallable routeCallable = router.getRouteCallable("controller", "/cmswitch");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof DefaultController);
@@ -104,22 +104,22 @@ class ComplexRouteRouterTest {
 
     @Test
     void testRouteWithCMSwitchSecond() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        BasicRouter router = getRouterWithCMSwitchRoutes();
+        Router router = getRouterWithCMSwitchRoutes();
         RouteCallable routeCallable = router.getRouteCallable("controller", "/test/cmswitch");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof TestController);
         assertEquals(((TestController) controller).called, "cmswitch");
     }
 
-    private BasicRouter getRouterWithCMSwitchRoutes() {
-        BasicRouter router = new BasicRouter(new Route("(?<method>[a-z\\-]+)","Default","index"));
+    private Router getRouterWithCMSwitchRoutes() {
+        Router router = new Router(new Route("(?<method>[a-z\\-]+)","Default","index"));
         router.addRoute(new Route("(?<controller>[a-z\\-]+)(?<method>/[a-z\\-]+)?","Default","index"));
         return router;
     }
 
     @Test
     void testRouteWithMultipleDifferentParametersWhereNotAllAreFilled() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        BasicRouter router = new BasicRouter(getRouteWithMultipleParameters());
+        Router router = new Router(getRouteWithMultipleParameters());
         RouteCallable routeCallable = router.getRouteCallable("controller", "/test/multiple/1");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof ErrorController);
@@ -127,7 +127,7 @@ class ComplexRouteRouterTest {
 
     @Test
     void testRouteWithCMSwitchAndStringParameterFirst() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        BasicRouter router = getRouterWithCMSwitchAndStringParameterRoutes();
+        Router router = getRouterWithCMSwitchAndStringParameterRoutes();
         RouteCallable routeCallable = router.getRouteCallable("controller", "/string/value");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof DefaultController);
@@ -136,7 +136,7 @@ class ComplexRouteRouterTest {
 
     @Test
     void testRouteWithCMSwitchAndStringParameterSecond() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        BasicRouter router = getRouterWithCMSwitchAndStringParameterRoutes();
+        Router router = getRouterWithCMSwitchAndStringParameterRoutes();
         RouteCallable routeCallable = router.getRouteCallable("controller", "/test/string/value");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof TestController);
@@ -145,15 +145,15 @@ class ComplexRouteRouterTest {
 
     @Test
     void testRouteWithCMSwitchAndStringParameterThird() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        BasicRouter router = getRouterWithCMSwitchAndStringParameterRoutes();
+        Router router = getRouterWithCMSwitchAndStringParameterRoutes();
         RouteCallable routeCallable = router.getRouteCallable("controller", "/value");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof DefaultController);
         assertEquals(((DefaultController) controller).called, "indexvalue");
     }
 
-    private BasicRouter getRouterWithCMSwitchAndStringParameterRoutes() {
-        BasicRouter router = new BasicRouter(new Route("(?<method>[a-z\\-]+)(?<string0>/[a-z\\-]+)?","Default","index"));
+    private Router getRouterWithCMSwitchAndStringParameterRoutes() {
+        Router router = new Router(new Route("(?<method>[a-z\\-]+)(?<string0>/[a-z\\-]+)?","Default","index"));
         router.addRoute(new Route("(?<controller>[a-z\\-]+)(?<method>/[a-z\\-]+)?(?<string0>/[a-z\\-]+)","Default","index"));
         router.addRoute(new Route("(?<string0>[a-z\\-]+)","Default","index"));
         return router;
@@ -161,7 +161,7 @@ class ComplexRouteRouterTest {
 
     @Test
     void testRouteWithModuleFirst() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        BasicRouter router = getRouterWithCmSwitchAndModelRoute();
+        Router router = getRouterWithCmSwitchAndModelRoute();
         RouteCallable routeCallable = router.getRouteCallable("controller", "/");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof controller.module.DefaultController);
@@ -170,7 +170,7 @@ class ComplexRouteRouterTest {
 
     @Test
     void testRouteWithModuleSecond() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        BasicRouter router = getRouterWithCmSwitchAndModelRoute();
+        Router router = getRouterWithCmSwitchAndModelRoute();
         RouteCallable routeCallable = router.getRouteCallable("controller", "/test/test");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof controller.module.TestController);
@@ -179,15 +179,15 @@ class ComplexRouteRouterTest {
 
     @Test
     void testRouteWithModuleThird() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        BasicRouter router = getRouterWithCmSwitchAndModelRoute();
+        Router router = getRouterWithCmSwitchAndModelRoute();
         RouteCallable routeCallable = router.getRouteCallable("controller", "/testmodule/test/test");
         Controller controller = routeCallable.callRoute(new RequestMocUp(), new ResponseMockUp());
         assertTrue(controller instanceof controller.testmodule.TestController);
         assertEquals(((controller.testmodule.TestController) controller).called, "test");
     }
 
-    private BasicRouter getRouterWithCmSwitchAndModelRoute() {
-        BasicRouter router = new BasicRouter(
+    private Router getRouterWithCmSwitchAndModelRoute() {
+        Router router = new Router(
                 new Route("(?<method>/[a-z\\-]+)?","Default","index","module")
         );
         router.addRoute(new Route("(?<controller>[a-z\\-]+)(?<method>/[a-z\\-]+)?","Default","index","module"));;

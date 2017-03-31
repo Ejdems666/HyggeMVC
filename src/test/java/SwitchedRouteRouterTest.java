@@ -3,7 +3,7 @@ import caller.ResponseMockUp;
 import controller.DefaultController;
 import controller.TestController;
 import hyggemvc.controller.Controller;
-import hyggemvc.router.BasicRouter;
+import hyggemvc.router.Router;
 import hyggemvc.router.Route;
 import hyggemvc.router.RouteCallable;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,12 +20,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class SwitchedRouteRouterTest {
 
     private Route firstRoute;
-    private BasicRouter router;
+    private Router router;
 
     @BeforeEach
     void setUp() {
         firstRoute = new Route("(?<method>[a-z\\-]+)?(?<controller>/[a-z\\-]+)?", "Default", "index");
-        router = new BasicRouter(firstRoute);
+        router = new Router(firstRoute);
     }
 
     @Test
