@@ -2,13 +2,15 @@ package hyggemvc.router;
 
 import hyggemvc.router.exceptions.DefaultNameOfCallableInUrlException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Created by adam on 12/03/2017.
- * Identifies module, controller, method and parameters in url according to regex route
+ * Identifies testmodule, controller, method and parameters in url according to regex route
  */
 public class UrlMatcher {
     private final Route route;
@@ -24,6 +26,7 @@ public class UrlMatcher {
             processParameters();
         }
     }
+
     private void processParameters() {
         String rawParameter;
         Object parameter;
@@ -35,7 +38,7 @@ public class UrlMatcher {
             } catch (IllegalArgumentException e) {
                 try {
                     rawParameter = getMatchedGroup("string" + i);
-                    addParameter(String.class,rawParameter);
+                    addParameter(String.class, rawParameter);
                 } catch (IllegalArgumentException e1) {
                     break; // if there are no parameters with current identifier, there will be none with a higher one
                 }
@@ -43,8 +46,8 @@ public class UrlMatcher {
         }
     }
 
-    private String getMatchedGroup(String name) {
-        String rawGroup =  matcher.group(name);
+    private String getMatchedGroup(String name) throws IllegalArgumentException {
+        String rawGroup = matcher.group(name);
         if (rawGroup != null && rawGroup.charAt(0) == '/') {
             return rawGroup.substring(1);
         }
@@ -56,34 +59,25 @@ public class UrlMatcher {
         parameters.add(parameter);
     }
 
-    public boolean matches() {
-        return matcher.matches();
-    }
-
-    public String extractControllerName() throws DefaultNameOfCallableInUrlException {
-        String controller = getMatchedGroup("controller");
-        if (controller == null) {
-            return route.getDefaultController();
-        } else {
-            controller = Notator.toCamelCase(controller);
-            if (Notator.ucFirst(controller).equals(route.getDefaultController())) {
-                throw new DefaultNameOfCallableInUrlException(controller, "Controller");
+    public Map<String,RouteElement> extractCallableElements() throws DefaultNameOfCallableInUrlException {
+        Map<String, RouteElement> callableElements = route.getCallableElements();
+        for (Map.Entry<String, RouteElement> entry : callableElements.entrySet()) {
+            String urlElement = null;
+            RouteElement routeElement = entry.getValue();
+            String group = entry.getKey();
+            try {
+                urlElement = getMatchedGroup(group);
+            } catch (IllegalArgumentException e) {}
+            if (urlElement != null) {
+                urlElement = Notator.toCamelCase(urlElement);
+                if (urlElement.equals(routeElement.getDefaultValue())) {
+                    throw new DefaultNameOfCallableInUrlException(urlElement, group);
+                } else {
+                    routeElement.setUrlValue(urlElement);
+                }
             }
         }
-        return controller;
-    }
-
-    public String extractMethodName() throws DefaultNameOfCallableInUrlException {
-        String method = getMatchedGroup("method");
-        if (method == null) {
-            return route.getDefaultMethod();
-        } else {
-            method = Notator.toCamelCase(method);
-            if (method.equals(route.getDefaultMethod())) {
-                throw new DefaultNameOfCallableInUrlException(method, "Method");
-            }
-        }
-        return method;
+        return callableElements;
     }
 
     public Class<?>[] getParameterTypes() {
@@ -92,5 +86,9 @@ public class UrlMatcher {
 
     public Object[] getParameters() {
         return parameters.toArray();
+    }
+
+    public boolean matches() {
+        return matcher.matches();
     }
 }
