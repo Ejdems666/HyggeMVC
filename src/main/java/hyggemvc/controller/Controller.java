@@ -1,6 +1,6 @@
 package hyggemvc.controller;
 
-import hyggemvc.component.BootstrapAlerts;
+import hyggemvc.component.Alerts;
 import hyggemvc.component.Component;
 
 import javax.servlet.ServletException;
@@ -13,8 +13,7 @@ import java.io.IOException;
  * Created by adam on 25/02/2017.
  */
 public abstract class Controller {
-    private boolean wasRedirected = false;
-    private BootstrapAlerts alerts = null;
+    private Alerts alerts = null;
 
     protected final HttpServletRequest request;
     protected final HttpServletResponse response;
@@ -49,23 +48,14 @@ public abstract class Controller {
     protected void redirect(String url) {
         try {
             response.sendRedirect(url);
-            wasRedirected = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean wasRedirected() {
-        return wasRedirected;
-    }
-
-    public boolean templateWasRendered() {
-        return request.getAttribute("template") != null;
-    }
-
-    protected void setAlert(BootstrapAlerts.Type type, String message) {
+    protected void addAlert(Alerts.Type type, String message) {
         if (alerts == null) {
-            alerts = new BootstrapAlerts(request.getSession());
+            alerts = new Alerts(request.getSession());
         }
         alerts.addAlert(type,message);
     }
