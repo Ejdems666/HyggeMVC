@@ -3,10 +3,10 @@
   <groupId>ejdems-hygge</groupId>
   <artifactId>HyggeMVC</artifactId>
   <versioning>
-    <release>0.4.0-BETA</release>
+    <release>0.5.0</release>
     <versions>
-      <version>0.4.0-BETA</version>
+      <version>0.5.0</version>
     </versions>
-    <lastUpdated>20170330073805</lastUpdated>
+    <lastUpdated>20170402091329</lastUpdated>
   </versioning>
 </metadata>
