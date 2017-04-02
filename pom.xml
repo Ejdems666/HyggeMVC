@@ -6,7 +6,7 @@
 
     <groupId>ejdems-hygge</groupId>
     <artifactId>HyggeMVC</artifactId>
-    <version>0.3.1</version>
+    <version>0.5.0</version>
 
     <properties>
         <!-- github server corresponds to entry in ~/.m2/settings.xml -->

@@ -1,22 +1,34 @@
 package hyggemvc.router;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * Created by adam on 25/02/2017.
+ * Created by adam on 10/03/2017.
  */
-public interface Route {
-    String getControllerClass();
+public class Route {
+    private String pattern;
+    private Map<String,RouteElement> callableElements = new HashMap<>();
 
-    void setErrorRoute(Exception e, String errorType);
+    public Route(String pattern, String defaultController, String defaultMethod) {
+        this.pattern = pattern;
+        callableElements.put("controller",new RouteElement(Notator.lcFirst(defaultController)));
+        callableElements.put("method",new RouteElement(defaultMethod));
+        callableElements.put("module",new RouteElement(null));
+    }
 
-    void setControllerName(String controllerName);
+    public Route(String pattern, String defaultController, String defaultMethod, String defaultModel) {
+        this.pattern = pattern;
+        callableElements.put("controller",new RouteElement(Notator.lcFirst(defaultController)));
+        callableElements.put("method",new RouteElement(defaultMethod));
+        callableElements.put("module",new RouteElement(defaultModel));
+    }
 
-    String getMethodName();
+    public String getPattern() {
+        return pattern;
+    }
 
-    void setMethodName(String methodName);
-
-    Object getArgument();
-
-    void setArgument(Object argument);
-
-    void setControllerPackage(String controllerPackage);
+    public Map<String, RouteElement> getCallableElements() {
+        return callableElements;
+    }
 }

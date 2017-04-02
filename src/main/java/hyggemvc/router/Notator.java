@@ -3,17 +3,24 @@ package hyggemvc.router;
 /**
  * Created by adam on 21/02/2017.
  */
-public class UrlParser {
-    public String toCamelCaseWithFirstUpperCase(String url){
-        StringBuilder controllerName = new StringBuilder();
-        String withoutFirstLetter = url.substring(1, url.length());
-        String firstLetter = url.substring(0, 1).toUpperCase();
-        controllerName.append(firstLetter).append(withoutFirstLetter);
-
-        return toCamelCase(controllerName.toString());
+public class Notator {
+    public static String toCamelCaseWithFirstUpperCase(String url){
+        return toCamelCase(ucFirst(url));
     }
 
-    public String toCamelCase(String url){
+    public static String ucFirst(String url) {
+        String withoutFirstLetter = url.substring(1, url.length());
+        String firstLetter = url.substring(0, 1).toUpperCase();
+        return firstLetter + withoutFirstLetter;
+    }
+
+    public static String lcFirst(String url) {
+        String withoutFirstLetter = url.substring(1, url.length());
+        String firstLetter = url.substring(0, 1).toLowerCase();
+        return firstLetter + withoutFirstLetter;
+    }
+
+    public static String toCamelCase(String url){
         StringBuilder cleanUrl = new StringBuilder();
         String newWordFirstLetter;
         for (int i = 0; i < url.length(); i++) {
