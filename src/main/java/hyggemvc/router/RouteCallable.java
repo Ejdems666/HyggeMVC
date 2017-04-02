@@ -13,6 +13,9 @@ import java.util.Map;
  * Created by adam on 25/02/2017.
  */
 public class RouteCallable {
+    private final String controllerName;
+    private final String methodName;
+    private final String moduleName;
     private Class<?> controllerClass;
     private Method method;
     private Object[] parameters;
@@ -20,23 +23,31 @@ public class RouteCallable {
     public RouteCallable(
             String packageName, String controllerName, String methodName, Class<?>[] parameterTypes, Object[] parameters
     ) throws ClassNotFoundException, NoSuchMethodException {
-        controllerClass = Class.forName(getFullControllerName(packageName, controllerName));
-        method = controllerClass.getDeclaredMethod(methodName, parameterTypes);
+        moduleName = "";
+        this.controllerName = controllerName;
+        this.methodName = methodName;
         this.parameters = parameters;
+        prepareCallable(packageName, parameterTypes);
+    }
+
+    private void prepareCallable(String packageName, Class<?>[] parameterTypes) throws ClassNotFoundException, NoSuchMethodException {
+        String fullControllerName = packageName + "." + controllerName + "Controller";
+        controllerClass = Class.forName(fullControllerName);
+        method = controllerClass.getDeclaredMethod(methodName, parameterTypes);
     }
 
     public RouteCallable(
-            String packageName, Map<String,RouteElement> callableElements, Class<?>[] parameterTypes, Object[] parameters
+            String packageName, Map<String, RouteElement> callableElements, Class<?>[] parameterTypes, Object[] parameters
     ) throws ClassNotFoundException, NoSuchMethodException {
-        String module = callableElements.get("module").getUrlValue();
-        if (module != null) {
-            packageName += "."+module;
+        moduleName = callableElements.get("module").getUrlValue();
+        if (moduleName != null) {
+            packageName += "." + moduleName;
         }
-        String controller = Notator.ucFirst(callableElements.get("controller").getUrlValue());
-        String method = callableElements.get("method").getUrlValue();
-        controllerClass = Class.forName(getFullControllerName(packageName, controller));
-        this.method = controllerClass.getDeclaredMethod(method, parameterTypes);
+        controllerName = Notator.ucFirst(callableElements.get("controller").getUrlValue());
+        methodName = callableElements.get("method").getUrlValue();
         this.parameters = parameters;
+        prepareCallable(packageName, parameterTypes);
+
     }
 
     public static RouteCallable notFoundCallable(String packageName, Exception exception) {
@@ -65,14 +76,14 @@ public class RouteCallable {
         }
     }
 
-    private String getFullControllerName(String packageName, String controllerName) {
-        return packageName + "." + controllerName + "Controller";
-    }
 
     public Controller callRoute(HttpServletRequest request, HttpServletResponse response)
             throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
         Constructor<?> constructor = controllerClass.getConstructor(HttpServletRequest.class, HttpServletResponse.class);
         Controller controller = ((Controller) constructor.newInstance(request, response));
+        controller.setModuleName(moduleName);
+        controller.setControllerName(controllerName);
+        controller.setMethodName(methodName);
         method.invoke(controller, parameters);
         return controller;
     }

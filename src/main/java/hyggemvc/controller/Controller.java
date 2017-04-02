@@ -15,6 +15,10 @@ import java.io.IOException;
 public abstract class Controller {
     private Alerts alerts = null;
 
+    private String controllerName;
+    private String methodName;
+    private String moduleName;
+
     protected final HttpServletRequest request;
     protected final HttpServletResponse response;
 
@@ -45,6 +49,15 @@ public abstract class Controller {
         return alerts;
     }
 
+    protected void renderTemplate() {
+        String template = "";
+        if (moduleName != null) {
+            template += moduleName+"/";
+        }
+        template += controllerName+"/"+methodName;
+        renderTemplate(template);
+    }
+
     protected void redirect(String url) {
         try {
             response.sendRedirect(url);
@@ -58,5 +71,23 @@ public abstract class Controller {
             alerts = new Alerts(request.getSession());
         }
         alerts.addAlert(type,message);
+    }
+    protected void alertSuccess(String message) {
+        addAlert(Alerts.Type.SUCCESS,message);
+    }
+    protected void alertError(String message) {
+        addAlert(Alerts.Type.ERROR,message);
+    }
+
+    public void setControllerName(String controllerName) {
+        this.controllerName = controllerName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
+    }
+
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
     }
 }
