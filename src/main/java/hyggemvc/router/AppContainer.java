@@ -9,12 +9,12 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by adam on 21/02/2017.
  */
-public class Container {
+public class AppContainer {
 
     private final HttpServletRequest request;
     private final HttpServletResponse response;
 
-    public Container(HttpServletRequest request, HttpServletResponse response) {
+    public AppContainer(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
     }

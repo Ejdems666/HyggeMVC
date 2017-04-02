@@ -113,7 +113,7 @@ class ComplexRouteRouterTest {
 
     private Router getRouterWithCMSwitchRoutes() {
         Router router = new Router(new Route("(?<method>[a-z\\-]+)","Default","index"));
-        router.addRoute(new Route("(?<controller>[a-z\\-]+)(?<method>/[a-z\\-]+)?","Default","index"));
+        router.addRoute(new Route("(?<controller>[a-z\\-]+)(?<method>/[a-z\\-]+)","Default","index"));
         return router;
     }
 
