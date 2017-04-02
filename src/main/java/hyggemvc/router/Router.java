@@ -4,6 +4,7 @@ import hyggemvc.router.exceptions.DefaultNameOfCallableInUrlException;
 import hyggemvc.router.exceptions.NoRouteMatchedException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -11,11 +12,15 @@ import java.util.Map;
  * Created by adam on 21/02/2017.
  */
 public class Router {
-    private List<Route> routes = new ArrayList<>();
-    private String packageName;
+    private List<Route> routes;
 
     public Router(Route firstRoute) {
+        routes = new ArrayList<>();
         routes.add(firstRoute);
+    }
+
+    public Router(Route... routes) {
+        this.routes = new ArrayList<>(Arrays.asList(routes));
     }
 
     public void addRoute(Route route) {
@@ -23,14 +28,13 @@ public class Router {
     }
 
     public RouteCallable getRouteCallable(String packageName, String url) {
-        this.packageName = packageName;
         url = url.substring(1);
         UrlMatcher urlMatcher;
         for (Route route : routes) {
             urlMatcher = new UrlMatcher(url, route);
             if (urlMatcher.matches()) {
                 try {
-                    Map<String,RouteElement> callableElements;
+                    Map<String, RouteElement> callableElements;
                     if (url.isEmpty()) {
                         callableElements = route.getCallableElements();
                     } else {
