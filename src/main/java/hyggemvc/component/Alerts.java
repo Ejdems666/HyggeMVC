@@ -5,11 +5,11 @@ import javax.servlet.http.HttpSession;
 /**
  * Created by adam on 28/02/2017.
  */
-public class BootstrapAlerts implements Component{
+public class Alerts implements Component{
     private String alerts = "";
     private final HttpSession session;
 
-    public BootstrapAlerts(HttpSession session) {
+    public Alerts(HttpSession session) {
         this.session = session;
         if (session.getAttribute("alerts") == null) {
             session.setAttribute("alerts",this);
@@ -22,7 +22,7 @@ public class BootstrapAlerts implements Component{
 
     @Override
     public String toString() {
-        session.setAttribute("alerts",null);
+        session.removeAttribute("alerts");
         return alerts;
     }
 

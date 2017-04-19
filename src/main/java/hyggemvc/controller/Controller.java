@@ -1,6 +1,6 @@
 package hyggemvc.controller;
 
-import hyggemvc.component.BootstrapAlerts;
+import hyggemvc.component.Alerts;
 import hyggemvc.component.Component;
 
 import javax.servlet.ServletException;
@@ -13,8 +13,11 @@ import java.io.IOException;
  * Created by adam on 25/02/2017.
  */
 public abstract class Controller {
-    private boolean wasRedirected = false;
-    private BootstrapAlerts alerts = null;
+    private Alerts alerts = null;
+
+    private String controllerName;
+    private String methodName;
+    private String moduleName;
 
     protected final HttpServletRequest request;
     protected final HttpServletResponse response;
@@ -46,27 +49,45 @@ public abstract class Controller {
         return alerts;
     }
 
+    protected void renderTemplate() {
+        String template = "";
+        if (moduleName != null) {
+            template += moduleName+"/";
+        }
+        template += controllerName+"/"+methodName;
+        renderTemplate(template);
+    }
+
     protected void redirect(String url) {
         try {
             response.sendRedirect(url);
-            wasRedirected = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean wasRedirected() {
-        return wasRedirected;
-    }
-
-    public boolean templateWasRendered() {
-        return request.getAttribute("template") != null;
-    }
-
-    protected void setAlert(BootstrapAlerts.Type type, String message) {
+    protected void addAlert(Alerts.Type type, String message) {
         if (alerts == null) {
-            alerts = new BootstrapAlerts(request.getSession());
+            alerts = new Alerts(request.getSession());
         }
         alerts.addAlert(type,message);
+    }
+    protected void alertSuccess(String message) {
+        addAlert(Alerts.Type.SUCCESS,message);
+    }
+    protected void alertError(String message) {
+        addAlert(Alerts.Type.ERROR,message);
+    }
+
+    public void setControllerName(String controllerName) {
+        this.controllerName = controllerName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
+    }
+
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
     }
 }
