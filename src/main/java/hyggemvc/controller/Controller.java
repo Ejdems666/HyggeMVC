@@ -29,6 +29,10 @@ public abstract class Controller {
     }
 
     protected void renderTemplate(String template) {
+        renderTemplate(template,"index");
+    }
+
+    protected void renderTemplate(String template, String layout) {
         response.setContentType("text/html");
         request.setAttribute("template", template);
         request.setAttribute("alerts", getAlerts());
@@ -37,7 +41,7 @@ public abstract class Controller {
             request.setAttribute("title", template);
         }
         try {
-            request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/"+layout+".jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
