@@ -2,6 +2,7 @@ package hyggemvc.controller;
 
 import hyggemvc.component.Alerts;
 import hyggemvc.component.Component;
+import hyggemvc.router.Notator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,10 @@ public abstract class Controller {
     }
 
     protected void renderTemplate(String template) {
+        renderTemplate(template,"index");
+    }
+
+    protected void renderTemplate(String template, String layout) {
         response.setContentType("text/html");
         request.setAttribute("template", template);
         request.setAttribute("alerts", getAlerts());
@@ -36,7 +41,7 @@ public abstract class Controller {
             request.setAttribute("title", template);
         }
         try {
-            request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/"+layout+".jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
@@ -54,7 +59,7 @@ public abstract class Controller {
         if (moduleName != null) {
             template += moduleName+"/";
         }
-        template += controllerName+"/"+methodName;
+        template += Notator.lcFirst(controllerName)+"/"+methodName;
         renderTemplate(template);
     }
 
