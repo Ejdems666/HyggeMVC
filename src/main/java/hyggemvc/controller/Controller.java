@@ -2,6 +2,7 @@ package hyggemvc.controller;
 
 import hyggemvc.component.Alerts;
 import hyggemvc.component.Component;
+import hyggemvc.router.Notator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -54,7 +55,7 @@ public abstract class Controller {
         if (moduleName != null) {
             template += moduleName+"/";
         }
-        template += controllerName+"/"+methodName;
+        template += Notator.lcFirst(controllerName)+"/"+methodName;
         renderTemplate(template);
     }
 
