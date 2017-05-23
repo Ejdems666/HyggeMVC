@@ -1,7 +1,5 @@
 package hyggemvc.router;
 
-import caller.RequestMocUp;
-import caller.ResponseMockUp;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -17,58 +15,54 @@ public class BasicRouteRouterTest {
 
     private Route firstRoute;
     private Router router;
-    private RequestMocUp request;
-    private ResponseMockUp response;
 
     @BeforeMethod
     public void setUp() {
         firstRoute = new Route("(?<controller>[a-z\\-]+)?(?<method>/[a-z\\-]+)?", "Default", "index");
         router = new Router(firstRoute);
-        request = new RequestMocUp();
-        response = new ResponseMockUp();
     }
 
     @Test
     public void testRouteOfEmptyUrl() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        ControllerReflection controllerReflection = router.getControllerReflection("controller", "/");
-        assertEquals(controllerReflection.getControllerName(), "Default");
-        assertEquals(controllerReflection.getMethodName(), "index");
+        EndpointReflection endpointReflection = router.getControllerReflection("controller", "/");
+        assertEquals(endpointReflection.getControllerName(), "Default");
+        assertEquals(endpointReflection.getMethodName(), "index");
     }
 
     @Test
     public void testRouteOfUrlWithEmptyMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        ControllerReflection controllerReflection = router.getControllerReflection("controller", "/test");
-        assertEquals(controllerReflection.getControllerName(), "Test");
-        assertEquals(controllerReflection.getMethodName(), "index");
+        EndpointReflection endpointReflection = router.getControllerReflection("controller", "/test");
+        assertEquals(endpointReflection.getControllerName(), "Test");
+        assertEquals(endpointReflection.getMethodName(), "index");
     }
 
     @Test
     public void testRouteOfUrlWithFullControllerAndMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        ControllerReflection controllerReflection = router.getControllerReflection("controller", "/test/test");
-        assertEquals(controllerReflection.getControllerName(), "Test");
-        assertEquals(controllerReflection.getMethodName(), "test");
+        EndpointReflection endpointReflection = router.getControllerReflection("controller", "/test/test");
+        assertEquals(endpointReflection.getControllerName(), "Test");
+        assertEquals(endpointReflection.getMethodName(), "test");
     }
 
     @Test
     public void testWrongUrl() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        ControllerReflection controllerReflection = router.getControllerReflection("controller", "/23");
-        assertErrorNotFound(controllerReflection);
+        EndpointReflection endpointReflection = router.getControllerReflection("controller", "/23");
+        assertErrorNotFound(endpointReflection);
     }
 
-    private void assertErrorNotFound(ControllerReflection controllerReflection) {
-        assertEquals(controllerReflection.getControllerName(), "Error");
-        assertEquals(controllerReflection.getMethodName(), "notFound");
+    private void assertErrorNotFound(EndpointReflection endpointReflection) {
+        assertEquals(endpointReflection.getControllerName(), "Error");
+        assertEquals(endpointReflection.getMethodName(), "notFound");
     }
 
     @Test
     public void testUrlWithDefaultValue() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        ControllerReflection controllerReflection = router.getControllerReflection("controller", "/default");
-        assertErrorNotFound(controllerReflection);
+        EndpointReflection endpointReflection = router.getControllerReflection("controller", "/default");
+        assertErrorNotFound(endpointReflection);
     }
 
     @Test
     public void testUrlWithDefaultValueInMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        ControllerReflection controllerReflection = router.getControllerReflection("controller", "/test/index");
-        assertErrorNotFound(controllerReflection);
+        EndpointReflection endpointReflection = router.getControllerReflection("controller", "/test/index");
+        assertErrorNotFound(endpointReflection);
     }
 }

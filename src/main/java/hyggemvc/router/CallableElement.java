@@ -3,13 +3,15 @@ package hyggemvc.router;
 /**
  * Created by adam on 31/03/2017.
  */
-public class RouteElement {
+public class CallableElement {
     private String urlValue;
     private final String defaultValue;
+    private String regexGroup;
 
-    public RouteElement(String defaultValue) {
+    public CallableElement(String defaultValue, String regexGroup) {
         this.defaultValue = defaultValue;
         urlValue = defaultValue;
+        this.regexGroup = regexGroup;
     }
 
     public String getUrlValue() {
@@ -22,5 +24,9 @@ public class RouteElement {
 
     public String getDefaultValue() {
         return defaultValue;
+    }
+
+    public String getRegexGroup() {
+        return regexGroup;
     }
 }

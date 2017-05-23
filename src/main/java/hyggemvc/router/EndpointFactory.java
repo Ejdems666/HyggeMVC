@@ -10,16 +10,16 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by adam on 23/05/2017.
  */
-public class ControllerFactory {
-    public Controller callController(ControllerReflection callable, HttpServletRequest request, HttpServletResponse response)
+public class EndpointFactory {
+    public Controller callEndpoint(EndpointReflection reflection, HttpServletRequest request, HttpServletResponse response)
             throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
-        Constructor<?> constructor = callable.getControllerClass()
+        Constructor<?> constructor = reflection.getControllerClass()
                 .getConstructor(HttpServletRequest.class, HttpServletResponse.class);
         Controller controller = ((Controller) constructor.newInstance(request, response));
-        controller.setModuleName(callable.getModuleName());
-        controller.setControllerName(callable.getControllerName());
-        controller.setMethodName(callable.getMethodName());
-        callable.getMethod().invoke(controller, callable.getParameters());
+        controller.setModuleName(reflection.getModuleName());
+        controller.setControllerName(reflection.getControllerName());
+        controller.setMethodName(reflection.getMethodName());
+        reflection.getMethod().invoke(controller, reflection.getParameters());
         return controller;
     }
 }

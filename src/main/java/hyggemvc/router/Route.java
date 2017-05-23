@@ -8,27 +8,24 @@ import java.util.Map;
  */
 public class Route {
     private String pattern;
-    private Map<String,RouteElement> callableElements = new HashMap<>();
+    private Map<String, CallableElement> callableElements = new HashMap<>();
+    private CallableElementsHolder callableElementsHolder;
 
     public Route(String pattern, String defaultController, String defaultMethod) {
         this.pattern = pattern;
-        callableElements.put("controller",new RouteElement(Notator.lcFirst(defaultController)));
-        callableElements.put("method",new RouteElement(defaultMethod));
-        callableElements.put("module",new RouteElement(null));
+        callableElementsHolder = new CallableElementsHolder(defaultController, defaultMethod);
     }
 
     public Route(String pattern, String defaultController, String defaultMethod, String defaultModel) {
         this.pattern = pattern;
-        callableElements.put("controller",new RouteElement(Notator.lcFirst(defaultController)));
-        callableElements.put("method",new RouteElement(defaultMethod));
-        callableElements.put("module",new RouteElement(defaultModel));
+        callableElementsHolder = new CallableElementsHolder(defaultController, defaultMethod, defaultModel);
     }
 
     public String getPattern() {
         return pattern;
     }
 
-    public Map<String, RouteElement> getCallableElements() {
-        return callableElements;
+    public CallableElementsHolder getCallableElementsHolder() {
+        return callableElementsHolder;
     }
 }

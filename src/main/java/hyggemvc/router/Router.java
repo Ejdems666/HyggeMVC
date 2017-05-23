@@ -6,7 +6,6 @@ import hyggemvc.router.exceptions.NoRouteMatchedException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by adam on 21/02/2017.
@@ -27,22 +26,19 @@ public class Router {
         routes.add(route);
     }
 
-    public ControllerReflection getControllerReflection(String packageName, String url) {
+    public EndpointReflection getControllerReflection(String packageName, String url) {
         url = url.substring(1);
         UrlMatcher urlMatcher;
         for (Route route : routes) {
             urlMatcher = new UrlMatcher(url, route);
             if (urlMatcher.matches()) {
                 try {
-                    Map<String, RouteElement> callableElements;
-                    if (url.isEmpty()) {
-                        callableElements = route.getCallableElements();
-                    } else {
-                        callableElements = urlMatcher.extractCallableElements();
+                    if (!url.isEmpty()) {
+                        urlMatcher.extractCallableElements();
                     }
-                    return new ControllerReflection(
+                    return new EndpointReflection(
                             packageName,
-                            callableElements,
+                            route.getCallableElementsHolder(),
                             urlMatcher.getParameterTypes(),
                             urlMatcher.getParameters()
                     );
@@ -56,9 +52,9 @@ public class Router {
         return createNotFoundController(packageName, new NoRouteMatchedException());
     }
 
-    private ControllerReflection createNotFoundController(String packageName, Exception exception) {
+    private EndpointReflection createNotFoundController(String packageName, Exception exception) {
         try {
-            return new ControllerReflection(
+            return new EndpointReflection(
                     packageName,
                     "Error",
                     "notFound",
@@ -68,7 +64,7 @@ public class Router {
         } catch (ClassNotFoundException | NoSuchMethodException e) {
             // If 404 is not present, frameworks ErrorController is called
             try {
-                return new ControllerReflection(
+                return new EndpointReflection(
                         "hyggemvc.controller",
                         "Error",
                         "notFound",

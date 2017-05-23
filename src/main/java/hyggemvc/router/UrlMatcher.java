@@ -4,7 +4,6 @@ import hyggemvc.router.exceptions.DefaultNameOfCallableInUrlException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,25 +58,30 @@ public class UrlMatcher {
         parameters.add(parameter);
     }
 
-    public Map<String,RouteElement> extractCallableElements() throws DefaultNameOfCallableInUrlException {
-        Map<String, RouteElement> callableElements = route.getCallableElements();
-        for (Map.Entry<String, RouteElement> entry : callableElements.entrySet()) {
-            String urlElement = null;
-            RouteElement routeElement = entry.getValue();
-            String group = entry.getKey();
-            try {
-                urlElement = getMatchedGroup(group);
-            } catch (IllegalArgumentException e) {}
-            if (urlElement != null) {
-                urlElement = Notator.toCamelCase(urlElement);
-                if (urlElement.equals(routeElement.getDefaultValue())) {
-                    throw new DefaultNameOfCallableInUrlException(urlElement, group);
-                } else {
-                    routeElement.setUrlValue(urlElement);
-                }
+    public void extractCallableElements() throws DefaultNameOfCallableInUrlException {
+        CallableElementsHolder callableElements = route.getCallableElementsHolder();
+        processCallableElement(callableElements.getController());
+        processCallableElement(callableElements.getMethod());
+        if (callableElements.getModule() != null) {
+            processCallableElement(callableElements.getModule());
+        }
+    }
+
+    private void processCallableElement(CallableElement callableElement) throws DefaultNameOfCallableInUrlException {
+        String urlElement;
+        try {
+            urlElement = getMatchedGroup(callableElement.getRegexGroup());
+        } catch (IllegalArgumentException e) {
+            return;
+        }
+        if (urlElement != null) {
+            urlElement = Notator.toCamelCase(urlElement);
+            if (urlElement.equals(callableElement.getDefaultValue())) {
+                throw new DefaultNameOfCallableInUrlException(urlElement, callableElement.getRegexGroup());
+            } else {
+                callableElement.setUrlValue(urlElement);
             }
         }
-        return callableElements;
     }
 
     public Class<?>[] getParameterTypes() {
