@@ -16,6 +16,6 @@ public class ApiController extends Controller {
     public String called;
 
     public void index(Integer number) {
-        called = "index"+number;
+        called = "index" + number;
     }
 }

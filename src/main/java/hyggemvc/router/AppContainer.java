@@ -20,9 +20,10 @@ public class AppContainer {
     }
 
     //TODO: master try catch block would come here
-    public void run(RouteCallable routeCallable) {
+    public void run(ControllerReflection controllerReflection) {
         try {
-            Controller controller = routeCallable.callRoute(request,response);
+            ControllerFactory controllerFactory = new ControllerFactory();
+            Controller controller = controllerFactory.callController(controllerReflection, request, response);
         } catch (IllegalAccessException | InvocationTargetException | InstantiationException | NoSuchMethodException e) {
             e.printStackTrace();
         }

@@ -18,19 +18,23 @@ public class TestController extends Controller {
     public void index() {
         called = "index";
     }
+
     public void test() {
         called = "test";
     }
+
     public void number(Integer number) {
-        called = "number"+number;
+        called = "number" + number;
     }
-    public void multiple(Integer number,String text,Integer number2) {
-        called = "multiple"+number+text+number2;
+
+    public void multiple(Integer number, String text, Integer number2) {
+        called = "multiple" + number + text + number2;
     }
 
     public void string(String text) {
-        called = "string"+text;
+        called = "string" + text;
     }
+
     public void cmswitch() {
         called = "cmswitch";
     }

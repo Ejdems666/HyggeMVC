@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Created by adam on 25/02/2017.
  */
-public class RequestMocUp implements HttpServletRequest{
+public class RequestMocUp implements HttpServletRequest {
 
     @Override
     public String getAuthType() {

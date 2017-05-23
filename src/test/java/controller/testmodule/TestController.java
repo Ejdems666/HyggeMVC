@@ -18,6 +18,7 @@ public class TestController extends Controller {
     public void index() {
         called = "index";
     }
+
     public void test() {
         called = "test";
     }

@@ -15,24 +15,24 @@ public class DefaultController extends Controller {
 
     public String called = null;
 
-    public void index(){
+    public void index() {
         called = "index";
     }
 
-    public void index(Integer number){
-        called = "index"+number;
+    public void index(Integer number) {
+        called = "index" + number;
     }
 
-    public void index(String text){
-        called = "index"+text;
+    public void index(String text) {
+        called = "index" + text;
     }
 
-    public void defaultTest(){
+    public void defaultTest() {
         called = "defaultTest";
     }
 
     public void string(String text) {
-        called = "string"+text;
+        called = "string" + text;
     }
 
     public void cmswitch() {

@@ -12,12 +12,14 @@ public class DefaultController extends Controller {
     public DefaultController(HttpServletRequest request, HttpServletResponse response) {
         super(request, response);
     }
+
     public String called = null;
 
-    public void index(){
+    public void index() {
         called = "index";
     }
-    public void text(){
+
+    public void text() {
         called = "text";
     }
 }

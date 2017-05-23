@@ -27,7 +27,7 @@ public class Router {
         routes.add(route);
     }
 
-    public RouteCallable getRouteCallable(String packageName, String url) {
+    public ControllerReflection getControllerReflection(String packageName, String url) {
         url = url.substring(1);
         UrlMatcher urlMatcher;
         for (Route route : routes) {
@@ -40,7 +40,7 @@ public class Router {
                     } else {
                         callableElements = urlMatcher.extractCallableElements();
                     }
-                    return new RouteCallable(
+                    return new ControllerReflection(
                             packageName,
                             callableElements,
                             urlMatcher.getParameterTypes(),
@@ -53,6 +53,32 @@ public class Router {
                 }
             }
         }
-        return RouteCallable.notFoundCallable(packageName, new NoRouteMatchedException());
+        return createNotFoundController(packageName, new NoRouteMatchedException());
+    }
+
+    private ControllerReflection createNotFoundController(String packageName, Exception exception) {
+        try {
+            return new ControllerReflection(
+                    packageName,
+                    "Error",
+                    "notFound",
+                    new Class<?>[]{Exception.class},
+                    new Object[]{exception}
+            );
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
+            // If 404 is not present, frameworks ErrorController is called
+            try {
+                return new ControllerReflection(
+                        "hyggemvc.controller",
+                        "Error",
+                        "notFound",
+                        new Class<?>[]{Exception.class},
+                        new Object[]{e}
+                );
+            } catch (ClassNotFoundException | NoSuchMethodException e1) {
+                e1.printStackTrace(); // This will not happen until frameworks ErrorController is deleted
+            }
+            return null;
+        }
     }
 }
