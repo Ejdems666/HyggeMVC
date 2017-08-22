@@ -1,4 +1,4 @@
-package hyggemvc.servlet;
+package hyggemvc.run.servlet;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

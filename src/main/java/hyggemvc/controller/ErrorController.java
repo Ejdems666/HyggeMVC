@@ -1,17 +1,10 @@
 package hyggemvc.controller;
 
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 /**
  * Created by adam on 25/02/2017.
  */
-public class ErrorController extends Controller{
-    public ErrorController(HttpServletRequest request, HttpServletResponse response) {
-        super(request, response);
-    }
-
+public class ErrorController extends Controller {
     public void notFound(Exception exception) {
         System.out.println("Native 404 was called, no route matched and no ErrorController.notFound was found");
     }

@@ -1,6 +1,7 @@
 package hyggemvc.router;
 
 import hyggemvc.controller.Controller;
+import hyggemvc.run.result.Result;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,15 +12,21 @@ import java.lang.reflect.InvocationTargetException;
  * Created by adam on 23/05/2017.
  */
 public class EndpointFactory {
-    public Controller callEndpoint(EndpointReflection reflection, HttpServletRequest request, HttpServletResponse response)
-            throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
+    public Result callEndpoint(EndpointReflection reflection, HttpServletRequest request, HttpServletResponse response)
+            throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, ClassCastException {
         Constructor<?> constructor = reflection.getControllerClass()
                 .getConstructor(HttpServletRequest.class, HttpServletResponse.class);
-        Controller controller = ((Controller) constructor.newInstance(request, response));
+        Controller controller = ((Controller) constructor.newInstance());
+
         controller.setModuleName(reflection.getModuleName());
         controller.setControllerName(reflection.getControllerName());
         controller.setMethodName(reflection.getMethodName());
-        reflection.getMethod().invoke(controller, reflection.getParameters());
-        return controller;
+        controller.setRequest(request);
+        controller.setResponse(response);
+        Object result = reflection.getMethod().invoke(controller, reflection.getParameters());
+        if (result == null) {
+            return null;
+        }
+        return (Result) result;
     }
 }

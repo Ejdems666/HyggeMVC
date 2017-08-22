@@ -1,6 +1,7 @@
 package hyggemvc.router;
 
 import hyggemvc.router.exceptions.DefaultNameOfCallableInUrlException;
+import hyggemvc.utilities.Notator;
 
 import java.util.ArrayList;
 import java.util.List;

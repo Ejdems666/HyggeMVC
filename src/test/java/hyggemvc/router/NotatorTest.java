@@ -1,5 +1,6 @@
 package hyggemvc.router;
 
+import hyggemvc.utilities.Notator;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

@@ -1,5 +1,7 @@
 package hyggemvc.router;
 
+import hyggemvc.utilities.Notator;
+
 /**
  * Created by adam on 23/05/2017.
  */

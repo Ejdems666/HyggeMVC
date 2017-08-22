@@ -1,5 +1,7 @@
 package hyggemvc.router;
 
+import hyggemvc.utilities.Notator;
+
 import java.lang.reflect.Method;
 
 /**

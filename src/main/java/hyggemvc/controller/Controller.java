@@ -2,7 +2,7 @@ package hyggemvc.controller;
 
 import hyggemvc.component.Alerts;
 import hyggemvc.component.Component;
-import hyggemvc.router.Notator;
+import hyggemvc.utilities.Notator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,47 +20,43 @@ public abstract class Controller {
     private String methodName;
     private String moduleName;
 
-    protected final HttpServletRequest request;
-    protected final HttpServletResponse response;
+    protected HttpServletRequest request;
+    protected HttpServletResponse response;
 
-    public Controller(HttpServletRequest request, HttpServletResponse response) {
-        this.request = request;
-        this.response = response;
+    protected void renderTemplate() {
+        String template = "";
+        if (moduleName != null) {
+            template += moduleName + "/";
+        }
+        template += Notator.lcFirst(controllerName) + "/" + methodName;
+        renderTemplate(template);
     }
 
     protected void renderTemplate(String template) {
-        renderTemplate(template,"index");
+        renderTemplate(template, "index");
     }
 
     protected void renderTemplate(String template, String layout) {
-        response.setContentType("text/html");
-        request.setAttribute("template", template);
         request.setAttribute("alerts", getAlerts());
 
+        response.setContentType("text/html");
+        request.setAttribute("template", template);
         if (request.getAttribute("title") == null) {
             request.setAttribute("title", template);
         }
         try {
-            request.getRequestDispatcher("/WEB-INF/"+layout+".jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/" + layout + ".jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
     }
+
     private Component getAlerts() {
         HttpSession session = request.getSession();
         if (alerts == null && session.getAttribute("alerts") != null) {
             return ((Component) session.getAttribute("alerts"));
         }
         return alerts;
-    }
-
-    protected void renderTemplate() {
-        String template = "";
-        if (moduleName != null) {
-            template += moduleName+"/";
-        }
-        template += Notator.lcFirst(controllerName)+"/"+methodName;
-        renderTemplate(template);
     }
 
     protected void redirect(String url) {
@@ -75,13 +71,23 @@ public abstract class Controller {
         if (alerts == null) {
             alerts = new Alerts(request.getSession());
         }
-        alerts.addAlert(type,message);
+        alerts.addAlert(type, message);
     }
+
     protected void alertSuccess(String message) {
-        addAlert(Alerts.Type.SUCCESS,message);
+        addAlert(Alerts.Type.SUCCESS, message);
     }
+
     protected void alertError(String message) {
-        addAlert(Alerts.Type.ERROR,message);
+        addAlert(Alerts.Type.ERROR, message);
+    }
+
+    public void setRequest(HttpServletRequest request) {
+        this.request = request;
+    }
+
+    public void setResponse(HttpServletResponse response) {
+        this.response = response;
     }
 
     public void setControllerName(String controllerName) {
@@ -94,5 +100,17 @@ public abstract class Controller {
 
     public void setModuleName(String moduleName) {
         this.moduleName = moduleName;
+    }
+
+    public String getControllerName() {
+        return controllerName;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public String getModuleName() {
+        return moduleName;
     }
 }
