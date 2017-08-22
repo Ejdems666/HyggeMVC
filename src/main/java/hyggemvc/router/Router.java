@@ -44,15 +44,17 @@ public class Router {
                     );
                 } catch (DefaultNameOfCallableInUrlException e) {
                     // TODO: again route monitoring here
+                    System.out.println(e.getMessage());
                 } catch (NoSuchMethodException | ClassNotFoundException e) {
                     // TODO: route monitoring would come here
+                    System.out.println("No match for route: " + route.getPattern());
                 }
             }
         }
-        return createNotFoundController(packageName, new NoRouteMatchedException());
+        return createNotFoundEndpoint(packageName, new NoRouteMatchedException());
     }
 
-    private EndpointReflection createNotFoundController(String packageName, Exception exception) {
+    private EndpointReflection createNotFoundEndpoint(String packageName, Exception exception) {
         try {
             return new EndpointReflection(
                     packageName,
