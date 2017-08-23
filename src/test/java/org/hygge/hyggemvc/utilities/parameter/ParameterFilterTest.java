@@ -1,7 +1,5 @@
-package org.hygge.hyggemvc.parameter;
+package org.hygge.hyggemvc.utilities.parameter;
 
-import org.hygge.hyggemvc.utilities.parameter.ParameterFilter;
-import org.hygge.hyggemvc.utilities.parameter.ParsedParameters;
 import org.hygge.hyggemvc.utilities.parameter.exception.ParameterParserException;
 import org.hygge.hyggemvc.utilities.parameter.exception.RequiredParameterNonExistentException;
 import org.hygge.hyggemvc.utilities.parameter.type.ParameterMask;
@@ -16,7 +14,7 @@ import static org.easymock.EasyMock.*;
 /**
  * Created by adam on 19/04/2017.
  */
-public class ParameterParserTest {
+public class ParameterFilterTest {
     private ParameterFilter parameterFilter;
     private ParsedParameters parsedParameters;
     HttpServletRequest request;

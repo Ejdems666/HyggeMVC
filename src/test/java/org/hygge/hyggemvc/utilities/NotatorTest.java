@@ -1,6 +1,5 @@
-package org.hygge.hyggemvc.router;
+package org.hygge.hyggemvc.utilities;
 
-import org.hygge.hyggemvc.utilities.Notator;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
