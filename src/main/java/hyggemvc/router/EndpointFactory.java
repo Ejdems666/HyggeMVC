@@ -14,8 +14,17 @@ import java.lang.reflect.InvocationTargetException;
 public class EndpointFactory {
     public Result callEndpoint(EndpointReflection reflection, HttpServletRequest request, HttpServletResponse response)
             throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, ClassCastException {
-        Constructor<?> constructor = reflection.getControllerClass()
-                .getConstructor(HttpServletRequest.class, HttpServletResponse.class);
+        Controller controller = instantiateController(reflection, request, response);
+        Object result = reflection.getMethod().invoke(controller, reflection.getParameters());
+        if (result == null) {
+            return null;
+        }
+        return (Result) result;
+    }
+
+    private Controller instantiateController(EndpointReflection reflection, HttpServletRequest request, HttpServletResponse response)
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        Constructor<?> constructor = reflection.getControllerClass().getConstructor();
         Controller controller = ((Controller) constructor.newInstance());
 
         controller.setModuleName(reflection.getModuleName());
@@ -23,10 +32,6 @@ public class EndpointFactory {
         controller.setMethodName(reflection.getMethodName());
         controller.setRequest(request);
         controller.setResponse(response);
-        Object result = reflection.getMethod().invoke(controller, reflection.getParameters());
-        if (result == null) {
-            return null;
-        }
-        return (Result) result;
+        return controller;
     }
 }

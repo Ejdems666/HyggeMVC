@@ -3,7 +3,7 @@ package hyggemvc.router;
 import controller.ApiController;
 import controller.DefaultController;
 import controller.module.TestController;
-import hyggemvc.controller.Controller;
+import hyggemvc.run.result.Result;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -33,26 +33,35 @@ public class EndpointFactoryTest {
     public void testCallBasicEndpoint() throws Exception {
         CallableElementsHolder callableElementsHolder = new CallableElementsHolder("Default","index");
         EndpointReflection endpointReflection = new EndpointReflection("controller", callableElementsHolder, new Class<?>[]{}, new Object[]{});
-        Controller controller = factory.callEndpoint(endpointReflection, request, response);
-        Assert.assertTrue(controller instanceof DefaultController);
-        Assert.assertEquals(((DefaultController) controller).called,"index");
+        Result result = factory.callEndpoint(endpointReflection, request, response);
+        Assert.assertEquals(endpointReflection.getControllerClass(), DefaultController.class);
+        Assert.assertEquals(result.getResult(),"index");
+    }
+
+    @Test
+    public void testCallBasicVoidEndpoint() throws Exception {
+        CallableElementsHolder callableElementsHolder = new CallableElementsHolder("Default","defaultTest");
+        EndpointReflection endpointReflection = new EndpointReflection("controller", callableElementsHolder, new Class<?>[]{}, new Object[]{});
+        Result result = factory.callEndpoint(endpointReflection, request, response);
+        Assert.assertEquals(endpointReflection.getControllerClass(), DefaultController.class);
+        Assert.assertEquals(result, null);
     }
 
     @Test
     public void testCallBasicEndpointWithModule() throws Exception {
         CallableElementsHolder callableElementsHolder = new CallableElementsHolder("Test","index", "module");
         EndpointReflection endpointReflection = new EndpointReflection("controller", callableElementsHolder, new Class<?>[]{}, new Object[]{});
-        Controller controller = factory.callEndpoint(endpointReflection, request, response);
-        Assert.assertTrue(controller instanceof TestController);
-        Assert.assertEquals(((TestController) controller).called,"index");
+        Result result = factory.callEndpoint(endpointReflection, request, response);
+        Assert.assertEquals(endpointReflection.getControllerClass(), TestController.class);
+        Assert.assertEquals(result.getResult(),"index");
     }
 
     @Test
     public void testCallBasicEndpointWithParameter() throws Exception {
         CallableElementsHolder callableElementsHolder = new CallableElementsHolder("Api","index");
         EndpointReflection endpointReflection = new EndpointReflection("controller", callableElementsHolder, new Class<?>[]{Integer.class}, new Object[]{1});
-        Controller controller = factory.callEndpoint(endpointReflection, request, response);
-        Assert.assertTrue(controller instanceof ApiController);
-        Assert.assertEquals(((ApiController) controller).called,"index1");
+        Result result = factory.callEndpoint(endpointReflection, request, response);
+        Assert.assertEquals(endpointReflection.getControllerClass(),ApiController.class);
+        Assert.assertEquals(result.getResult(),"index1");
     }
 }

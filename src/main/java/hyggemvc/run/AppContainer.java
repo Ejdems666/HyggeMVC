@@ -29,12 +29,8 @@ public class AppContainer {
         try {
             EndpointFactory endpointFactory = new EndpointFactory();
             Result result = endpointFactory.callEndpoint(endpointReflection, request, response);
-            Resulter resulter;
-            if (result instanceof JspResult) {
-                resulter = new JspResulter((JspResult) result, request, response);
-            } else {
-                return;
-            }
+            Resulter resulter = getResulter(result);
+            if (resulter == null) return;
             resulter.result();
         } catch (IllegalAccessException | InvocationTargetException | InstantiationException | NoSuchMethodException e) {
             e.printStackTrace(); // should not happen
@@ -45,5 +41,15 @@ public class AppContainer {
                             " did not return object of type: " + Result.class
             );
         }
+    }
+
+    private Resulter getResulter(Result result) {
+        Resulter resulter;
+        if (result instanceof JspResult) {
+            resulter = new JspResulter((JspResult) result, request, response);
+        } else {
+            return null;
+        }
+        return resulter;
     }
 }
