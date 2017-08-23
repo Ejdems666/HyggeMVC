@@ -1,4 +1,4 @@
-package controller;
+package mock.controller;
 
 import hyggemvc.controller.Controller;
 

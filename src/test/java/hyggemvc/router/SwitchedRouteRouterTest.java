@@ -24,21 +24,21 @@ public class SwitchedRouteRouterTest {
 
     @Test
     public void testRouteOfEmptyUrl() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        EndpointReflection endpointReflection = router.getControllerReflection("controller", "/");
+        EndpointReflection endpointReflection = router.getControllerReflection("mock.controller", "/");
         assertEquals(endpointReflection.getControllerName(), "Default");
         assertEquals(endpointReflection.getMethodName(), "index");
     }
 
     @Test
     public void testRouteOfUrlWithFullControllerAndMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        EndpointReflection endpointReflection = router.getControllerReflection("controller", "/test/test");
+        EndpointReflection endpointReflection = router.getControllerReflection("mock.controller", "/test/test");
         assertEquals(endpointReflection.getControllerName(), "Test");
         assertEquals(endpointReflection.getMethodName(), "test");
     }
 
     @Test
     public void testRouteOfUrlWithEmptyControllerAndFullMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        EndpointReflection endpointReflection = router.getControllerReflection("controller", "/default-test");
+        EndpointReflection endpointReflection = router.getControllerReflection("mock.controller", "/default-test");
         assertEquals(endpointReflection.getControllerName(), "Default");
         assertEquals(endpointReflection.getMethodName(), "defaultTest");
     }

@@ -24,28 +24,28 @@ public class BasicRouteRouterTest {
 
     @Test
     public void testRouteOfEmptyUrl() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        EndpointReflection endpointReflection = router.getControllerReflection("controller", "/");
+        EndpointReflection endpointReflection = router.getControllerReflection("mock.controller", "/");
         assertEquals(endpointReflection.getControllerName(), "Default");
         assertEquals(endpointReflection.getMethodName(), "index");
     }
 
     @Test
     public void testRouteOfUrlWithEmptyMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        EndpointReflection endpointReflection = router.getControllerReflection("controller", "/test");
+        EndpointReflection endpointReflection = router.getControllerReflection("mock.controller", "/test");
         assertEquals(endpointReflection.getControllerName(), "Test");
         assertEquals(endpointReflection.getMethodName(), "index");
     }
 
     @Test
     public void testRouteOfUrlWithFullControllerAndMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        EndpointReflection endpointReflection = router.getControllerReflection("controller", "/test/test");
+        EndpointReflection endpointReflection = router.getControllerReflection("mock.controller", "/test/test");
         assertEquals(endpointReflection.getControllerName(), "Test");
         assertEquals(endpointReflection.getMethodName(), "test");
     }
 
     @Test
     public void testWrongUrl() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        EndpointReflection endpointReflection = router.getControllerReflection("controller", "/23");
+        EndpointReflection endpointReflection = router.getControllerReflection("mock.controller", "/23");
         assertErrorNotFound(endpointReflection);
     }
 
@@ -56,13 +56,13 @@ public class BasicRouteRouterTest {
 
     @Test
     public void testUrlWithDefaultValue() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        EndpointReflection endpointReflection = router.getControllerReflection("controller", "/default");
+        EndpointReflection endpointReflection = router.getControllerReflection("mock.controller", "/default");
         assertErrorNotFound(endpointReflection);
     }
 
     @Test
     public void testUrlWithDefaultValueInMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        EndpointReflection endpointReflection = router.getControllerReflection("controller", "/test/index");
+        EndpointReflection endpointReflection = router.getControllerReflection("mock.controller", "/test/index");
         assertErrorNotFound(endpointReflection);
     }
 }
