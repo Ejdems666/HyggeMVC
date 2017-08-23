@@ -1,6 +1,6 @@
 package mock.controller;
 
-import hyggemvc.controller.Controller;
+import org.hygge.hyggemvc.controller.Controller;
 
 /**
  * Created by adam on 26/02/2017.

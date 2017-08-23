@@ -1,8 +1,8 @@
 package mock.controller;
 
-import hyggemvc.controller.Controller;
-import hyggemvc.run.result.Result;
-import hyggemvc.run.result.StringResult;
+import org.hygge.hyggemvc.controller.Controller;
+import org.hygge.hyggemvc.run.result.Result;
+import org.hygge.hyggemvc.run.result.StringResult;
 
 /**
  * Created by adam on 12/03/2017.
