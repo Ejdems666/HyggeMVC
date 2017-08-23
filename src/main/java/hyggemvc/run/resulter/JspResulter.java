@@ -1,11 +1,13 @@
 package hyggemvc.run.resulter;
 
+import hyggemvc.component.Component;
 import hyggemvc.run.result.jsp.Jsp;
 import hyggemvc.run.result.jsp.JspResult;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -26,6 +28,7 @@ public class JspResulter implements Resulter {
     @Override
     public void result() {
         response.setContentType("text/html");
+        request.setAttribute("alerts", getAlerts());
         request.setAttribute("template", jsp.getTemplateName());
         if (request.getAttribute("title") == null) {
             request.setAttribute("title", jsp.getTemplateName());
@@ -35,5 +38,13 @@ public class JspResulter implements Resulter {
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private Component getAlerts() {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("alerts") != null) {
+            return ((Component) session.getAttribute("alerts"));
+        }
+        return null;
     }
 }
