@@ -36,9 +36,9 @@ The example routes will match and work with following endpoint examples:
     4. /item ............. DefaultController.item()
     5. / ................. DefaultController.index()
     
-When creating routes it is important to note that first route that matches the url and existing controller and method is called.
+When creating routes it is important to note that routes are evaluated in sequence. Therefore if the first route that matches the url and the requested controller and method exist the programme continues into the controller method and no other route is evaluated.
 
-So if methods in example 1 and 4 both exist, DefaultController will be called, because it matches the first route.
+So if methods in example 1 and 4 both exist, DefaultController.item() will be called, because it comes from the match of the first route, even thought the second route can match the same url.
 
 Also notice that the url names are translated to camelCase, viz example 2
 
