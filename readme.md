@@ -46,7 +46,7 @@ If the value in url is missing, default values specified after first argument in
 
 Note that the first symbol "/" is already being accounted for in the routing engine, so don't include it in the rout pattern.
 
-Also the trailing slashes (...(?\<method\>**/**[a-z\\-]+)?) are handled by the engine automatically, so there is no need to handle them in the pattern. 
+Also the trailing slashes (...(?\<method\>`/`[a-z\\-]+)?) are handled by the engine automatically, so there is no need to handle them in the pattern. 
 
 ## Method arguments
 
