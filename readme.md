@@ -1,3 +1,5 @@
+I made this simple framework to speed up the development time of my school projects.
+
 # Routing
 
 To use the routing engine create a Filter class with this mapping in web.xml:
@@ -44,9 +46,9 @@ Also notice that the url names are translated to camelCase, viz example 2
 
 If the value in url is missing, default values specified after first argument in Route constructor, are used instead, viz example 1, 4 and 5.
 
-Note that the first symbol "/" is already being accounted for in the routing engine, so don't include it in the rout pattern.
+Note that the first slash in url (`/`item...) is already being accounted for in the routing engine, so don't include it in the rout pattern.
 
-Also the trailing slashes (...(?\<method\>**/**[a-z\\-]+)?) are handled by the engine automatically, so there is no need to handle them in the pattern. 
+Also the trailing slashes (example: ...(?\<method\>**`/`**[a-z\\-]+)?) are handled by the engine automatically, so there is no need to handle them in the pattern. 
 
 ## Method arguments
 

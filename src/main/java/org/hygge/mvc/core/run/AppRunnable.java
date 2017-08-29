@@ -1,6 +1,7 @@
 package org.hygge.mvc.core.run;
 
-import org.hygge.mvc.core.router.EndpointFactory;
+import org.hygge.mvc.core.mock.controller.Controller;
+import org.hygge.mvc.core.router.ControllerFactory;
 import org.hygge.mvc.core.router.EndpointReflection;
 import org.hygge.mvc.core.run.result.Result;
 import org.hygge.mvc.core.run.result.jsp.JspResult;
@@ -14,12 +15,12 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by adam on 21/02/2017.
  */
-public class AppContainer {
+public class AppRunnable {
 
     private final HttpServletRequest request;
     private final HttpServletResponse response;
 
-    public AppContainer(HttpServletRequest request, HttpServletResponse response) {
+    public AppRunnable(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
     }
@@ -27,11 +28,13 @@ public class AppContainer {
     //TODO: master try catch block would come here
     public void run(EndpointReflection endpointReflection) {
         try {
-            EndpointFactory endpointFactory = new EndpointFactory();
-            Result result = endpointFactory.callEndpoint(endpointReflection, request, response);
+            ControllerFactory controllerFactory = new ControllerFactory();
+            Controller controller = controllerFactory.setupControllerObject(endpointReflection, request, response);
+            Result result = (Result) endpointReflection.getMethod().invoke(controller, endpointReflection.getParameters());
             Resulter resulter = getResulter(result);
-            if (resulter == null) return;
-            resulter.result();
+                if (resulter != null) {
+                resulter.returnResultInResponse();
+            }
         } catch (IllegalAccessException | InvocationTargetException | InstantiationException | NoSuchMethodException e) {
             e.printStackTrace(); // should not happen
         } catch (ClassCastException e) {

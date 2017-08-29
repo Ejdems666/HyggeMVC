@@ -22,7 +22,7 @@ public class JspResult implements Result<Jsp> {
     /**
      * Takes module, controller and method name as parameters for template name as follows:
      * templateName = "[module>/]<controller>/<method>"
-     * @param controller object with needed values (use this to get default JSP result)
+     * @param controller object with needed values (use this to get default JSP returnResultInResponse)
      */
     public JspResult(Controller controller) {
         String template = "";

@@ -42,6 +42,14 @@ public abstract class Controller {
         addAlert(Alerts.Type.ERROR, message);
     }
 
+    public void beforeEndpointCall() {
+
+    }
+
+    public void afterEndpointCall() {
+
+    }
+
     public void setRequest(HttpServletRequest request) {
         this.request = request;
     }

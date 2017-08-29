@@ -3,6 +3,7 @@ package org.hygge.mvc.core.router;
 import org.hygge.mvc.core.mock.controller.ApiController;
 import org.hygge.mvc.core.mock.controller.DefaultController;
 import org.hygge.mvc.core.mock.controller.module.TestController;
+import org.hygge.mvc.core.run.AppRunnable;
 import org.hygge.mvc.core.run.result.Result;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -16,15 +17,15 @@ import static org.easymock.EasyMock.createMock;
 /**
  * Created by adam on 23/05/2017.
  */
-public class EndpointFactoryTest {
+public class ControllerFactoryTest {
 
-    private EndpointFactory factory;
+    private ControllerFactory factory;
     private HttpServletRequest request;
     private HttpServletResponse response;
 
     @BeforeMethod
     public void setUp() throws Exception {
-        factory = new EndpointFactory();
+        factory = new ControllerFactory();
         request = createMock(HttpServletRequest.class);
         response = createMock(HttpServletResponse.class);
     }
@@ -33,6 +34,8 @@ public class EndpointFactoryTest {
     public void testCallBasicEndpoint() throws Exception {
         CallableElementsHolder callableElementsHolder = new CallableElementsHolder("Default","index");
         EndpointReflection endpointReflection = new EndpointReflection("org.hygge.mvc.core.mock.controller", callableElementsHolder, new Class<?>[]{}, new Object[]{});
+        AppRunnable appRunnable = new AppRunnable(request,response);
+        appRunnable.run(endpointReflection);
         Result result = factory.callEndpoint(endpointReflection, request, response);
         Assert.assertEquals(endpointReflection.getControllerClass(), DefaultController.class);
         Assert.assertEquals(result.getResult(),"index");

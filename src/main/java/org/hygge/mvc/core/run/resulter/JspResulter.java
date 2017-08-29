@@ -26,7 +26,7 @@ public class JspResulter implements Resulter {
     }
 
     @Override
-    public void result() {
+    public void returnResultInResponse() {
         response.setContentType("text/html");
         request.setAttribute("alerts", getAlerts());
         request.setAttribute("template", jsp.getTemplateName());
