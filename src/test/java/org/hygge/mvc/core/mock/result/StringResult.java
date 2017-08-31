@@ -1,4 +1,6 @@
-package org.hygge.mvc.core.run.result;
+package org.hygge.mvc.core.mock.result;
+
+import org.hygge.mvc.core.run.result.Result;
 
 /**
  * Created by adam on 8/23/2017.

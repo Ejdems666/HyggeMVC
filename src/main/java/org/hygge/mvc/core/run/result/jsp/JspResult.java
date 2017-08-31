@@ -9,14 +9,14 @@ import org.hygge.mvc.core.utilities.Notator;
  */
 public class JspResult implements Result<Jsp> {
 
-    private Jsp jsp;
+    private Jsp result;
 
     public JspResult(String templateName) {
-        this.jsp = new Jsp(templateName);
+        this.result = new Jsp(templateName);
     }
 
     public JspResult(String templateName, String layoutName) {
-        this.jsp = new Jsp(templateName,layoutName);
+        this.result = new Jsp(templateName,layoutName);
     }
 
     /**
@@ -34,6 +34,6 @@ public class JspResult implements Result<Jsp> {
 
     @Override
     public Jsp getResult() {
-        return jsp;
+        return result;
     }
 }

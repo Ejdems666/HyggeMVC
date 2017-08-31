@@ -2,8 +2,10 @@ package org.hygge.mvc.core.run;
 
 import org.hygge.mvc.core.mock.controller.Controller;
 import org.hygge.mvc.core.router.EndpointReflection;
+import org.hygge.mvc.core.run.result.JsonResult;
 import org.hygge.mvc.core.run.result.Result;
 import org.hygge.mvc.core.run.result.jsp.JspResult;
+import org.hygge.mvc.core.run.resulter.JsonResulter;
 import org.hygge.mvc.core.run.resulter.JspResulter;
 import org.hygge.mvc.core.run.resulter.Resulter;
 
@@ -31,10 +33,7 @@ public class AppRunnable {
             Controller controller = controllerFactory.setupControllerObject(endpointReflection, request, response);
             EndpointInvoker invoker = new EndpointInvoker();
             Result result = invoker.invokeEndpoint(controller, endpointReflection);
-            Resulter resulter = getResulter(result);
-            if (resulter != null) {
-                resulter.returnResultInResponse();
-            }
+            sendResponse(result);
         } catch (IllegalAccessException | InvocationTargetException | InstantiationException | NoSuchMethodException e) {
             e.printStackTrace(); // should not happen
         } catch (ClassCastException e) {
@@ -46,13 +45,15 @@ public class AppRunnable {
         }
     }
 
-    private Resulter getResulter(Result result) {
+    private void sendResponse(Result result) {
         Resulter resulter;
         if (result instanceof JspResult) {
             resulter = new JspResulter((JspResult) result, request, response);
+        } else if (result instanceof JsonResult) {
+            resulter = new JsonResulter(result, response);
         } else {
-            return null;
+            return;
         }
-        return resulter;
+        resulter.returnResultInResponse();
     }
 }
