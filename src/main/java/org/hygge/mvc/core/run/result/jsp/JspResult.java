@@ -1,6 +1,6 @@
 package org.hygge.mvc.core.run.result.jsp;
 
-import org.hygge.mvc.core.mock.controller.Controller;
+import org.hygge.mvc.core.controller.Controller;
 import org.hygge.mvc.core.run.result.Result;
 import org.hygge.mvc.core.utilities.Notator;
 

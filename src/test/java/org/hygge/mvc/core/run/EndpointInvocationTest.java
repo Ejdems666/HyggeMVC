@@ -1,9 +1,9 @@
 package org.hygge.mvc.core.run;
 
-import org.hygge.mvc.core.mock.controller.ApiController;
-import org.hygge.mvc.core.mock.controller.Controller;
-import org.hygge.mvc.core.mock.controller.DefaultController;
-import org.hygge.mvc.core.mock.controller.module.TestController;
+import org.hygge.mvc.core.mock.controllers.ApiController;
+import org.hygge.mvc.core.controller.Controller;
+import org.hygge.mvc.core.mock.controllers.DefaultController;
+import org.hygge.mvc.core.mock.controllers.module.TestController;
 import org.hygge.mvc.core.router.CallableElementsHolder;
 import org.hygge.mvc.core.router.EndpointReflection;
 import org.hygge.mvc.core.run.result.Result;

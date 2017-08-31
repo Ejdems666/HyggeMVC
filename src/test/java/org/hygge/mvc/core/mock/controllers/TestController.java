@@ -1,4 +1,6 @@
-package org.hygge.mvc.core.mock.controller;
+package org.hygge.mvc.core.mock.controllers;
+
+import org.hygge.mvc.core.controller.Controller;
 
 /**
  * Created by adam on 26/02/2017.
