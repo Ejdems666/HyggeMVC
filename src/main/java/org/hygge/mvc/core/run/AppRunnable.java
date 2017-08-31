@@ -1,7 +1,6 @@
 package org.hygge.mvc.core.run;
 
 import org.hygge.mvc.core.mock.controller.Controller;
-import org.hygge.mvc.core.router.ControllerFactory;
 import org.hygge.mvc.core.router.EndpointReflection;
 import org.hygge.mvc.core.run.result.Result;
 import org.hygge.mvc.core.run.result.jsp.JspResult;
@@ -30,9 +29,10 @@ public class AppRunnable {
         try {
             ControllerFactory controllerFactory = new ControllerFactory();
             Controller controller = controllerFactory.setupControllerObject(endpointReflection, request, response);
-            Result result = (Result) endpointReflection.getMethod().invoke(controller, endpointReflection.getParameters());
+            EndpointInvoker invoker = new EndpointInvoker();
+            Result result = invoker.invokeEndpoint(controller, endpointReflection);
             Resulter resulter = getResulter(result);
-                if (resulter != null) {
+            if (resulter != null) {
                 resulter.returnResultInResponse();
             }
         } catch (IllegalAccessException | InvocationTargetException | InstantiationException | NoSuchMethodException e) {
