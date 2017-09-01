@@ -2,6 +2,7 @@ package org.hygge.mvc.core.run;
 
 import org.hygge.mvc.core.controller.Controller;
 import org.hygge.mvc.core.router.EndpointReflection;
+import org.hygge.mvc.core.run.exceptions.IncorectMethodReturnType;
 import org.hygge.mvc.core.run.result.Result;
 
 import java.lang.reflect.InvocationTargetException;
@@ -12,10 +13,16 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class EndpointInvoker {
     public Result invokeEndpoint(Controller controller, EndpointReflection reflection)
-            throws InvocationTargetException, IllegalAccessException {
+            throws InvocationTargetException, IllegalAccessException, IncorectMethodReturnType {
         controller.beforeEndpointCall();
         Object result = reflection.getMethod().invoke(controller, reflection.getParameters());
         controller.afterEndpointCall();
-        return (Result) result;
+        try {
+            return (Result) result;
+        }
+        catch (ClassCastException e) {
+            throw new IncorectMethodReturnType(reflection);
+        }
+
     }
 }

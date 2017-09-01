@@ -2,6 +2,7 @@ package org.hygge.mvc.core.run;
 
 import org.hygge.mvc.core.controller.Controller;
 import org.hygge.mvc.core.router.EndpointReflection;
+import org.hygge.mvc.core.run.exceptions.IncorectMethodReturnType;
 import org.hygge.mvc.core.run.result.JsonResult;
 import org.hygge.mvc.core.run.result.Result;
 import org.hygge.mvc.core.run.result.jsp.JspResult;
@@ -35,13 +36,9 @@ public class AppRunnable {
             Result result = invoker.invokeEndpoint(controller, endpointReflection);
             sendResponse(result);
         } catch (IllegalAccessException | InvocationTargetException | InstantiationException | NoSuchMethodException e) {
-            e.printStackTrace(); // should not happen
-        } catch (ClassCastException e) {
-            System.out.println(
-                    "Method " + endpointReflection.getMethod() +
-                            " in controller " + endpointReflection.getControllerClass() +
-                            " did not return object of type: " + Result.class
-            );
+            e.printStackTrace(); // should not happen, already checked in EndpointReflection constructor
+        } catch (IncorectMethodReturnType | ClassCastException e) {
+            System.out.println(e.getMessage());
         }
     }
 

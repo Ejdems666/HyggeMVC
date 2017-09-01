@@ -6,7 +6,7 @@
 
     <groupId>org.hygge.mvc</groupId>
     <artifactId>core</artifactId>
-    <version>1.2.0-beta</version>
+    <version>1.2.3-beta</version>
 
     <properties>
         <!-- github server corresponds to entry in ~/.m2/settings.xml -->
