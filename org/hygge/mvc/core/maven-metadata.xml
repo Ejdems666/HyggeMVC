@@ -3,10 +3,10 @@
   <groupId>org.hygge.mvc</groupId>
   <artifactId>core</artifactId>
   <versioning>
-    <release>1.2.0-beta</release>
+    <release>1.2.3-beta</release>
     <versions>
-      <version>1.2.0-beta</version>
+      <version>1.2.3-beta</version>
     </versions>
-    <lastUpdated>20170901093136</lastUpdated>
+    <lastUpdated>20170901095023</lastUpdated>
   </versioning>
 </metadata>
