@@ -1,4 +1,4 @@
-package org.hygge.mvc.core.mock.controller;
+package org.hygge.mvc.core.controller;
 
 
 /**

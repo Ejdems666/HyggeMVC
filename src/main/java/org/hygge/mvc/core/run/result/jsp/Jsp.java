@@ -14,7 +14,7 @@ public class Jsp {
 
     public Jsp(String templateName) {
         this.templateName = templateName;
-        layoutName = "index.jsp";
+        layoutName = "index";
     }
 
     public String getLayoutName() {

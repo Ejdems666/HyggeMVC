@@ -1,6 +1,7 @@
-package org.hygge.mvc.core.router;
+package org.hygge.mvc.core.run;
 
-import org.hygge.mvc.core.mock.controller.Controller;
+import org.hygge.mvc.core.controller.Controller;
+import org.hygge.mvc.core.router.EndpointReflection;
 import org.hygge.mvc.core.run.result.Result;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,10 +12,10 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by adam on 23/05/2017.
  */
-public class EndpointFactory {
+public class ControllerFactory {
     public Result callEndpoint(EndpointReflection reflection, HttpServletRequest request, HttpServletResponse response)
             throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, ClassCastException {
-        Controller controller = instantiateController(reflection, request, response);
+        Controller controller = setupControllerObject(reflection, request, response);
         Object result = reflection.getMethod().invoke(controller, reflection.getParameters());
         if (result == null) {
             return null;
@@ -22,9 +23,10 @@ public class EndpointFactory {
         return (Result) result;
     }
 
-    private Controller instantiateController(EndpointReflection reflection, HttpServletRequest request, HttpServletResponse response)
+    public Controller setupControllerObject(EndpointReflection reflection, HttpServletRequest request, HttpServletResponse response)
             throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         Constructor<?> constructor = reflection.getControllerClass().getConstructor();
+        // TODO: Dependency injection
         Controller controller = ((Controller) constructor.newInstance());
 
         controller.setModuleName(reflection.getModuleName());

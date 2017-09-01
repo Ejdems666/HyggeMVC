@@ -1,4 +1,4 @@
-package org.hygge.mvc.core.mock.controller;
+package org.hygge.mvc.core.controller;
 
 import org.hygge.mvc.core.component.Alerts;
 
@@ -40,6 +40,14 @@ public abstract class Controller {
 
     protected void alertError(String message) {
         addAlert(Alerts.Type.ERROR, message);
+    }
+
+    public void beforeEndpointCall() {
+
+    }
+
+    public void afterEndpointCall() {
+
     }
 
     public void setRequest(HttpServletRequest request) {

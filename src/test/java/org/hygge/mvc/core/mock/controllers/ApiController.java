@@ -1,7 +1,8 @@
-package org.hygge.mvc.core.mock.controller;
+package org.hygge.mvc.core.mock.controllers;
 
+import org.hygge.mvc.core.controller.Controller;
 import org.hygge.mvc.core.run.result.Result;
-import org.hygge.mvc.core.run.result.StringResult;
+import org.hygge.mvc.core.mock.result.StringResult;
 
 /**
  * Created by adam on 12/03/2017.

@@ -24,28 +24,28 @@ public class BasicRouteRouterTest {
 
     @Test
     public void testRouteOfEmptyUrl() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controller", "/");
+        EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controllers", "/");
         assertEquals(endpointReflection.getControllerName(), "Default");
         assertEquals(endpointReflection.getMethodName(), "index");
     }
 
     @Test
     public void testRouteOfUrlWithEmptyMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controller", "/test");
+        EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controllers", "/test");
         assertEquals(endpointReflection.getControllerName(), "Test");
         assertEquals(endpointReflection.getMethodName(), "index");
     }
 
     @Test
     public void testRouteOfUrlWithFullControllerAndMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controller", "/test/test");
+        EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controllers", "/test/test");
         assertEquals(endpointReflection.getControllerName(), "Test");
         assertEquals(endpointReflection.getMethodName(), "test");
     }
 
     @Test
     public void testWrongUrl() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controller", "/23");
+        EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controllers", "/23");
         assertErrorNotFound(endpointReflection);
     }
 
@@ -56,13 +56,13 @@ public class BasicRouteRouterTest {
 
     @Test
     public void testUrlWithDefaultValue() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controller", "/default");
+        EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controllers", "/default");
         assertErrorNotFound(endpointReflection);
     }
 
     @Test
     public void testUrlWithDefaultValueInMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controller", "/test/index");
+        EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controllers", "/test/index");
         assertErrorNotFound(endpointReflection);
     }
 }
