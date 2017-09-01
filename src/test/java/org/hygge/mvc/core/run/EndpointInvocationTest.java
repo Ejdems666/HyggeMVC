@@ -37,7 +37,7 @@ public class EndpointInvocationTest {
     @Test
     public void testCallBasicEndpoint() throws Exception {
         CallableElementsHolder callableElementsHolder = new CallableElementsHolder("Default","index");
-        EndpointReflection endpointReflection = new EndpointReflection("org.hygge.mvc.core.mock.controller", callableElementsHolder, new Class<?>[]{}, new Object[]{});
+        EndpointReflection endpointReflection = new EndpointReflection("org.hygge.mvc.core.mock.controllers", callableElementsHolder, new Class<?>[]{}, new Object[]{});
         Controller controller = factory.setupControllerObject(endpointReflection,request,response);
         Result result = invoker.invokeEndpoint(controller, endpointReflection);
         Assert.assertEquals(controller.getClass(), DefaultController.class);
@@ -47,7 +47,7 @@ public class EndpointInvocationTest {
     @Test
     public void testCallBasicVoidEndpoint() throws Exception {
         CallableElementsHolder callableElementsHolder = new CallableElementsHolder("Default","defaultTest");
-        EndpointReflection endpointReflection = new EndpointReflection("org.hygge.mvc.core.mock.controller", callableElementsHolder, new Class<?>[]{}, new Object[]{});
+        EndpointReflection endpointReflection = new EndpointReflection("org.hygge.mvc.core.mock.controllers", callableElementsHolder, new Class<?>[]{}, new Object[]{});
         Controller controller = factory.setupControllerObject(endpointReflection,request,response);
         Result result = invoker.invokeEndpoint(controller, endpointReflection);
         Assert.assertEquals(controller.getClass(), DefaultController.class);
@@ -57,7 +57,7 @@ public class EndpointInvocationTest {
     @Test
     public void testCallBasicEndpointWithModule() throws Exception {
         CallableElementsHolder callableElementsHolder = new CallableElementsHolder("Test","index", "module");
-        EndpointReflection endpointReflection = new EndpointReflection("org.hygge.mvc.core.mock.controller", callableElementsHolder, new Class<?>[]{}, new Object[]{});
+        EndpointReflection endpointReflection = new EndpointReflection("org.hygge.mvc.core.mock.controllers", callableElementsHolder, new Class<?>[]{}, new Object[]{});
         Controller controller = factory.setupControllerObject(endpointReflection,request,response);
         Result result = invoker.invokeEndpoint(controller, endpointReflection);
         Assert.assertEquals(controller.getClass(), TestController.class);
@@ -67,7 +67,7 @@ public class EndpointInvocationTest {
     @Test
     public void testCallBasicEndpointWithParameter() throws Exception {
         CallableElementsHolder callableElementsHolder = new CallableElementsHolder("Api","index");
-        EndpointReflection endpointReflection = new EndpointReflection("org.hygge.mvc.core.mock.controller", callableElementsHolder, new Class<?>[]{Integer.class}, new Object[]{1});
+        EndpointReflection endpointReflection = new EndpointReflection("org.hygge.mvc.core.mock.controllers", callableElementsHolder, new Class<?>[]{Integer.class}, new Object[]{1});
         Controller controller = factory.setupControllerObject(endpointReflection,request,response);
         Result result = invoker.invokeEndpoint(controller, endpointReflection);
         Assert.assertEquals(controller.getClass(),ApiController.class);

@@ -2,13 +2,19 @@ package org.hygge.mvc.core.run.result;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jdk.nashorn.internal.ir.ObjectNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * Created by adam on 31/08/2017.
  */
 public class JsonResult implements Result<String> {
     private String result;
+
+    public JsonResult(String key, Object value) {
+        ObjectNode objectNode = new ObjectMapper().createObjectNode();
+        objectNode.put(key, String.valueOf(value));
+        result = objectNode.toString();
+    }
 
     public JsonResult(ObjectNode objectNode) {
         result = objectNode.toString();
