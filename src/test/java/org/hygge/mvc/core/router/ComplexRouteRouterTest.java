@@ -10,10 +10,11 @@ import static org.testng.Assert.assertEquals;
  * Created by adam on 25/02/2017.
  */
 public class ComplexRouteRouterTest {
+    private String requestMethod = "GET";
 
     @Test
     public void testRouteOfUrlWithEmptyMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Router router = new Router(getStandartRoute());
+        Router router = new Router(requestMethod, getStandartRoute());
         EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controllers", "/test/number/1");
         assertEquals(endpointReflection.getControllerName(), "Test");
         assertEquals(endpointReflection.getMethodName(), "number");
@@ -30,7 +31,7 @@ public class ComplexRouteRouterTest {
 
     @Test
     public void testRouteOnlyWithNumber() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Router router = new Router(getStandartRoute());
+        Router router = new Router(requestMethod, getStandartRoute());
         EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controllers", "/1");
         assertEquals(endpointReflection.getControllerName(), "Default");
         assertEquals(endpointReflection.getMethodName(), "index");
@@ -40,7 +41,7 @@ public class ComplexRouteRouterTest {
     @Test
     public void testRouteWithFixedPrefixNotUsingFirstRouteRule() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Route firstRoute = getStandartRoute();
-        Router router = new Router(firstRoute);
+        Router router = new Router(requestMethod, firstRoute);
         router.addRoute(getApiRoute());
         EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controllers", "/api/1");
         assertEquals(endpointReflection.getControllerName(), "Api");
@@ -59,7 +60,7 @@ public class ComplexRouteRouterTest {
     @Test
     public void testRouteStandardRouteNotBeingFirstRule() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Route firstRoute = getApiRoute();
-        Router router = new Router(firstRoute);
+        Router router = new Router(requestMethod, firstRoute);
         router.addRoute(getStandartRoute());
         EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controllers", "/test/number/1");
         assertEquals(endpointReflection.getControllerName(), "Test");
@@ -69,7 +70,7 @@ public class ComplexRouteRouterTest {
 
     @Test
     public void testRouteWithMultipleDifferentParameters() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Router router = new Router(getRouteWithMultipleParameters());
+        Router router = new Router(requestMethod, getRouteWithMultipleParameters());
         EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controllers", "/test/multiple/1/text/2");
         assertEquals(endpointReflection.getControllerName(), "Test");
         assertEquals(endpointReflection.getMethodName(), "multiple");
@@ -103,14 +104,14 @@ public class ComplexRouteRouterTest {
     }
 
     private Router getRouterWithCMSwitchRoutes() {
-        Router router = new Router(new Route("(?<method>[a-z\\-]+)", "Default", "index"));
+        Router router = new Router(requestMethod, new Route("(?<method>[a-z\\-]+)", "Default", "index"));
         router.addRoute(new Route("(?<controller>[a-z\\-]+)(?<method>/[a-z\\-]+)", "Default", "index"));
         return router;
     }
 
     @Test
     public void testRouteWithMultipleDifferentParametersWhereNotAllAreFilled() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Router router = new Router(getRouteWithMultipleParameters());
+        Router router = new Router(requestMethod, getRouteWithMultipleParameters());
         EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controllers", "/test/multiple/1");
         assertEquals(endpointReflection.getControllerName(), "Error");
         assertEquals(endpointReflection.getMethodName(), "notFound");
@@ -144,7 +145,7 @@ public class ComplexRouteRouterTest {
     }
 
     private Router getRouterWithCMSwitchAndStringParameterRoutes() {
-        Router router = new Router(new Route("(?<method>[a-z\\-]+)(?<string>/[a-z\\-]+)?", "Default", "index"));
+        Router router = new Router(requestMethod, new Route("(?<method>[a-z\\-]+)(?<string>/[a-z\\-]+)?", "Default", "index"));
         router.addRoute(new Route("(?<controller>[a-z\\-]+)(?<method>/[a-z\\-]+)?(?<string>/[a-z\\-]+)", "Default", "index"));
         router.addRoute(new Route("(?<string>[a-z\\-]+)", "Default", "index"));
         return router;
@@ -179,7 +180,7 @@ public class ComplexRouteRouterTest {
 
     private Router getRouterWithCmSwitchAndModelRoute() {
         Router router = new Router(
-                new Route("(?<method>/[a-z\\-]+)?", "Default", "index", "module")
+                requestMethod, new Route("(?<method>/[a-z\\-]+)?", "Default", "index", "module")
         );
         router.addRoute(new Route("(?<controller>[a-z\\-]+)(?<method>/[a-z\\-]+)?", "Default", "index", "module"));
         ;
@@ -190,7 +191,7 @@ public class ComplexRouteRouterTest {
     @Test
     public void testSpecificRoute() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Router router = new Router(
-                new Route("test", "Test", "test")
+                requestMethod, new Route("test", "Test", "test")
         );
         EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controllers", "/test");
         assertEquals(endpointReflection.getControllerName(), "Test");

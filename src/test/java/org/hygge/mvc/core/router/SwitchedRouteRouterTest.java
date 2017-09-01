@@ -13,13 +13,14 @@ import static org.testng.Assert.assertEquals;
  */
 public class SwitchedRouteRouterTest {
 
+    private String requestMethod = "GET";
     private Route firstRoute;
     private Router router;
 
     @BeforeMethod
     public void setUp() {
         firstRoute = new Route("(?<method>[a-z\\-]+)?(?<controller>/[a-z\\-]+)?", "Default", "index");
-        router = new Router(firstRoute);
+        router = new Router(requestMethod, firstRoute);
     }
 
     @Test

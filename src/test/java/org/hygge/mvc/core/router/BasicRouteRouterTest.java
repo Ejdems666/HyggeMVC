@@ -13,13 +13,14 @@ import static org.testng.Assert.assertEquals;
  */
 public class BasicRouteRouterTest {
 
+    private String requestMethod = "GET";
     private Route firstRoute;
     private Router router;
 
     @BeforeMethod
     public void setUp() {
         firstRoute = new Route("(?<controller>[a-z\\-]+)?(?<method>/[a-z\\-]+)?", "Default", "index");
-        router = new Router(firstRoute);
+        router = new Router(requestMethod, firstRoute);
     }
 
     @Test
@@ -64,5 +65,18 @@ public class BasicRouteRouterTest {
     public void testUrlWithDefaultValueInMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controllers", "/test/index");
         assertErrorNotFound(endpointReflection);
+    }
+
+    @Test
+    public void testWrongPostMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controllers", "/test/post");
+        assertErrorNotFound(endpointReflection);
+    }
+
+    @Test
+    public void testCorrectGetMethod() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        EndpointReflection endpointReflection = router.getControllerReflection("org.hygge.mvc.core.mock.controllers", "/test/get");
+        assertEquals(endpointReflection.getControllerName(), "Test");
+        assertEquals(endpointReflection.getMethodName(), "get");
     }
 }

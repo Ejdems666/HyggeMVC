@@ -1,8 +1,12 @@
 package org.hygge.mvc.core.router;
 
+import org.hygge.mvc.core.controller.annotation.Get;
+import org.hygge.mvc.core.controller.annotation.Post;
 import org.hygge.mvc.core.router.exceptions.DefaultNameOfCallableInUrlException;
-import org.hygge.mvc.core.router.exceptions.NoRouteMatchedException;
+import org.hygge.mvc.core.router.exceptions.IncorrectRequestMethod;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,15 +15,26 @@ import java.util.List;
  * Created by adam on 21/02/2017.
  */
 public class Router {
+    private Class<? extends Annotation> requestMethod;
     private List<Route> routes;
 
-    public Router(Route firstRoute) {
+    public Router(String requestMethod, Route firstRoute) {
+        prepareRequestMethod(requestMethod);
         routes = new ArrayList<>();
         routes.add(firstRoute);
     }
 
-    public Router(Route... routes) {
+    public Router(String requestMethod, Route... routes) {
+        prepareRequestMethod(requestMethod);
         this.routes = new ArrayList<>(Arrays.asList(routes));
+    }
+
+    private void prepareRequestMethod(String requestMethod) {
+        if (requestMethod.equals("POST")) {
+            this.requestMethod = Post.class;
+        } else {
+            this.requestMethod = Get.class;
+        }
     }
 
     public void addRoute(Route route) {
@@ -29,6 +44,7 @@ public class Router {
     public EndpointReflection getControllerReflection(String packageName, String url) {
         url = url.substring(1);
         UrlMatcher urlMatcher;
+        Exception lastExceptionAfterMatch = null;
         for (Route route : routes) {
             urlMatcher = new UrlMatcher(url, route);
             if (urlMatcher.matches()) {
@@ -36,22 +52,32 @@ public class Router {
                     if (!url.isEmpty()) {
                         urlMatcher.extractCallableElements();
                     }
-                    return new EndpointReflection(
+                    EndpointReflection endpointReflection = new EndpointReflection(
                             packageName,
                             route.getCallableElementsHolder(),
                             urlMatcher.getParameterTypes(),
                             urlMatcher.getParameters()
                     );
-                } catch (DefaultNameOfCallableInUrlException e) {
-                    // TODO: again route monitoring here
+                    checkRequestMethodAnnotation(endpointReflection.getMethod());
+                    return endpointReflection;
+                } catch (DefaultNameOfCallableInUrlException | IncorrectRequestMethod e) {
                     System.out.println(e.getMessage());
+                    lastExceptionAfterMatch = e;
                 } catch (NoSuchMethodException | ClassNotFoundException e) {
-                    // TODO: route monitoring would come here
                     System.out.println("No match for route: " + route.getPattern());
+                    lastExceptionAfterMatch = e;
                 }
             }
         }
-        return createNotFoundEndpoint(packageName, new NoRouteMatchedException());
+        return createNotFoundEndpoint(packageName, lastExceptionAfterMatch);
+    }
+
+    private void checkRequestMethodAnnotation(Method method) throws IncorrectRequestMethod {
+        if (method.isAnnotationPresent(Post.class) && !requestMethod.equals(Post.class)) {
+            throw new IncorrectRequestMethod(method,Post.class);
+        } else if (method.isAnnotationPresent(Get.class) && !requestMethod.equals(Get.class)){
+            throw new IncorrectRequestMethod(method,Get.class);
+        }
     }
 
     private EndpointReflection createNotFoundEndpoint(String packageName, Exception exception) {

@@ -1,6 +1,8 @@
 package org.hygge.mvc.core.mock.controllers;
 
 import org.hygge.mvc.core.controller.Controller;
+import org.hygge.mvc.core.controller.annotation.Get;
+import org.hygge.mvc.core.controller.annotation.Post;
 
 /**
  * Created by adam on 26/02/2017.
@@ -27,6 +29,16 @@ public class TestController extends Controller {
     }
 
     public void cmswitch() {
+
+    }
+
+    @Post
+    public void post() {
+
+    }
+
+    @Get
+    public void get() {
 
     }
 }

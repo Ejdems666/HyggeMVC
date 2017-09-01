@@ -42,7 +42,6 @@ public class EndpointReflection {
         methodName = callableElements.getMethod().getUrlValue();
         this.parameters = parameters;
         prepareControllerClassAndMethodReflections(packageName, parameterTypes);
-
     }
 
     private String setModuleNameAndAddToPackageName(String packageName, CallableElement callableElementModule) {
