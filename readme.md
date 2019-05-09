@@ -13,7 +13,7 @@ To use the routing engine create a Filter class with this mapping in web.xml:
 
 and extend the HyggeMVC RequestDispatcher and implement routeToController() method
 
-In this method you can create your routes and call a corresponding controller. viz an example:
+In this method you can create your routes and call a corresponding controller, example:
    
      protected void routeToController(HttpServletRequest request, HttpServletResponse response, String url) {
               Router router =
@@ -28,7 +28,7 @@ In this method you can create your routes and call a corresponding controller. v
 
 As you can see routes are using regular expressions with named groups.
 
-The example routes will match and work with following endpoint examples:
+The example routes will work for following endpoint examples:
 
     1. /item ............. ItemController.index()
     2. /item/long-name ... ItemController.longName()
@@ -38,11 +38,11 @@ The example routes will match and work with following endpoint examples:
     
 When creating routes it is important to note that routes are evaluated in sequence. Therefore if the first route that matches the url and the requested controller and method exist the programme continues into the controller method and no other route is evaluated.
 
-So if methods in example 1 and 4 both exist, DefaultController.item() will be called, because it comes from the match of the first route, even thought the second route can match the same url.
+So if we try to match `/item` and both methods in route examples 1 and 4 exist, DefaultController.item() will be called, because it is matched by the first route rule in the `routeToController` implementation example.
 
-Also notice that the url names are translated to camelCase, viz example 2
+Also notice that the url names are translated to camelCase, viz route example 2
 
-If the value in url is missing, default values specified after first argument in Route constructor, are used instead, viz example 1, 4 and 5.
+If the value in url is missing, default values specified after first argument in Route constructor, are used instead, viz route examples 1, 4 and 5.
 
 Note that the first symbol "/" is already being accounted for in the routing engine, so don't include it in the rout pattern.
 
@@ -85,7 +85,7 @@ and all previous endpoint examples are still valid.
 
 Thanks to the Default Controller and method values like "Default","index", custom url endpoints are possible.
 
-For instance if you make a this route:
+For instance if you make this route:
 
     new Route("custom-url","Custom","methodOfAnyName")
 
